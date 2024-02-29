@@ -4,7 +4,6 @@
 /node_modules
 /.pnp
 .pnp.js
-.yarn/install-state.gz
 
 # testing
 /coverage
@@ -18,6 +17,7 @@
 
 # misc
 .DS_Store
+.idea
 *.pem
 
 # debug
@@ -35,3 +35,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# eslint cache
+.eslintcache
+
+# next-sitemap
+robots.txt
+sitemap.xml
+sitemap-*.xml
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
