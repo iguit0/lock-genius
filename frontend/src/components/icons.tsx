@@ -1,10 +1,12 @@
 import {
+  ArrowLeft,
   BookLock,
   Copy,
   Loader,
   LogOut,
   LucideProps,
   Moon,
+  RefreshCcw,
   Sun,
 } from 'lucide-react';
 
@@ -15,6 +17,8 @@ export const Icons = {
   copy: Copy,
   bookLock: BookLock,
   loader: Loader,
+  arrowLeft: ArrowLeft,
+  refresh: RefreshCcw,
   githubAlternative: (props: LucideProps) => (
     <svg
       {...props}

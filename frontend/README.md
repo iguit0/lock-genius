@@ -12,12 +12,14 @@ If you have [nvm](https://github.com/nvm-sh/nvm#installing-and-updating):
 
 Install dependencies:
 
+>pnpm recommended
+
 ```bash
+pnpm i
+# or
 npm i
 # or
 yarn
-# or
-pnpm i
 ```
 
 ### Configuration
@@ -35,11 +37,11 @@ Set env values according to your database.
 Run the development server:
 
 ```bash
-npm run dev
+pnpm dev
 # or
 yarn dev
 # or
-pnpm dev
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your favorite browser.

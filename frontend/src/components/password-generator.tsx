@@ -1,48 +1,82 @@
 import { Icons } from './icons';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Separator } from './ui/separator';
+// import { Slider } from './ui/slider';
+import { Switch } from './ui/switch';
 
-// import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 export default function PasswordGenerator() {
   return (
-    <div className="mx-auto max-w-sm p-6">
-      <div className="mb-4">
-        <label className="mb-2 block text-sm font-bold" htmlFor="password">
-          Password
-        </label>
-        <div className="flex items-center  p-2">
-          <input id="password" readOnly type="text" value="some password" />
-          <Icons.copy />
+    <Card className="w-full max-w-2xl">
+      <CardHeader className="mb-3 space-y-2">
+        <CardTitle className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+          Password Generator
+        </CardTitle>
+        <CardDescription>
+          Generate a secure password based on selected options
+        </CardDescription>
+      </CardHeader>
+
+      <Separator className="my-1" />
+
+      <CardContent className="mt-2 space-y-8 p-4">
+        <div className="flex items-center space-x-2">
+          <Input
+            id="password"
+            type="text"
+            placeholder="🔑 Your generated password will appear here"
+            readOnly
+          />
+          <div className="flex items-center justify-between gap-1">
+            <Button size="icon" id="generate" variant="ghost">
+              <Icons.refresh className="size-5" />
+            </Button>
+            <Button size="icon" id="copy" variant="ghost">
+              <Icons.copy className="size-5" />
+            </Button>
+          </div>
         </div>
-      </div>
-      {/* <div className="mb-4">
-        <div className="mb-2">
-          <span className="text-sm font-bold">Character set </span>
-          <span className="text-red-500">*</span>
+
+        <div className="grid grid-cols-2 gap-8 p-4">
+          <div className="flex items-center space-x-2">
+            <Switch id="uppercase" />
+            <Label htmlFor="uppercase">Uppercase (A-Z)</Label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch defaultChecked id="numbers" />
+            <Label htmlFor="numbers">Numbers (0-9)</Label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch defaultChecked id="lowercase" />
+            <Label htmlFor="lowercase">Lowercase (a-z)</Label>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Switch id="symbols" />
+            <Label htmlFor="symbols">Symbols (!@#$%^&*)</Label>
+          </div>
         </div>
-        <div className="mb-2 flex items-center justify-between">
-          <Badge variant="secondary">Uppercase</Badge>
-          <Badge variant="secondary">Lowercase</Badge>
-          <Badge variant="secondary">Numbers</Badge>
-          <Badge variant="secondary">Symbols</Badge>
-        </div>
-      </div>
-      <div className="mb-4">
-        <div className="mb-2 flex justify-between">
-          <span className="text-sm font-bold">Password length </span>
-          <span className="text-red-500">*</span>
-        </div>
-        <input
-          className="h-2 w-full cursor-pointer appearance-none rounded-lg"
-          max="32"
-          min="0"
-          type="range"
-        />
-      </div> */}
-      <div className="mt-4 flex items-center justify-between">
-        {/* <Button variant="ghost">Save</Button> */}
-        <Button className="w-full">Generate</Button>
-      </div>
-    </div>
+
+        {/*
+        // TODO: implement
+        <div className="mt-8 space-y-4">
+          <Label className="inline" htmlFor="length">
+            Length
+          </Label>
+          <Slider defaultValue={[10]} id="length" max={20} min={6} />
+        </div> */}
+      </CardContent>
+    </Card>
   );
 }
