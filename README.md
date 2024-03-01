@@ -24,7 +24,6 @@ This monorepository contains both the backend and frontend components, providing
 
 ## ✨ Features
 
-
 ## Backend
 
 - [x] Health routes
@@ -33,7 +32,7 @@ This monorepository contains both the backend and frontend components, providing
 - [x] Collection
 - [x] Dev tools: lint, check typing, etc.
 - [x] Makefile
-- [ ] Dockerization
+- [x] Dockerization
 - [ ] Unit testing
 - [ ] Improve schemas validation
 
@@ -50,6 +49,8 @@ This monorepository contains both the backend and frontend components, providing
 - [ ] Improve services validation and types
 
 ## 🚀 Get Started
+
+>Soon there will be a guided video to install.
 
 To clone the repository to your local machine, follow these steps:
 1. Open a terminal.

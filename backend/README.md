@@ -4,9 +4,11 @@ A lightweight REST API built using FastAPI to serve Lock Genius's frontend. It a
 
 ## Features
 
+See more in [main README](../README.md).
+
 <!--- CRUD operations for managing passwords vaults (Create, Read, Update, Delete)-->
 - Endpoint to generate strong passwords with customizable options (length, uppercase, lowercase, numbers and symbols)
-<!--- Dockerized for easy deployment and scalability-->
+- Dockerized for easy deployment and scalability
 
 ## Prerequisites
 
@@ -29,7 +31,7 @@ Before running the application, make sure you have the following installed:
 2. Build and run the Docker containers:
 
     ```bash
-    docker-compose up --build
+    docker-compose up
     ```
 
 3. The API will be accessible at `http://localhost:8000`.
