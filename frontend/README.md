@@ -4,12 +4,11 @@
 
 **Use the recommended node version which is >=18.x**
 
-<!--If you have [nvm](https://github.com/nvm-sh/nvm#installing-and-updating):
+If you have [nvm](https://github.com/nvm-sh/nvm#installing-and-updating):
 
 ```shell
     nvm use
 ```
--->
 
 Install dependencies:
 
@@ -40,6 +39,3 @@ Copy env example:
 ### Getting started
 
 Open [http://localhost:3000](http://localhost:3000) with your favorite browser.
-
-
-

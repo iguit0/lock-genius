@@ -4,15 +4,41 @@
 
 <!--This monorepository contains both the backend and frontend components, providing a single, unified codebase for more efficient development and collaboration.-->
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 ## 📌 Table of Contents
 
-- [📌 Table of Contents](#-table-of-contents)
-- [🗣 Introduction](#-introduction)
-- [🚨 License](#-license)
+- [Lock Genius 🔐🛡️](#lock-genius-️)
+  - [📌 Table of Contents](#-table-of-contents)
+  - [🗣 Introduction](#-introduction)
+  - [🚀 Get Started](#-get-started)
+    - [🖥 Installation](#-installation)
+  - [🚨 License](#-license)
 
 ## 🗣 Introduction
 
 **Lock Genius** is your ultimate solution for secure password management. With its encrypted vault and advanced password generation capabilities, we make sure that your digital accounts remain protected at all times.
+
+## 🚀 Get Started
+
+To clone the repository to your local machine, follow these steps:
+1. Open a terminal.
+2. Navigate to the directory where you want to clone the repository.
+3. Execute the following command:
+
+```shell
+    git clone https://github.com/iguit0/lock-genius.git
+```
+
+```bash
+    cd lock-genius
+```
+
+### 🖥 Installation
+
+Once you have cloned the repository, you may need to install the project's dependencies. Follow the instructions below to set up the backend and frontend.
+
+- [Frontend instructions](./frontend/README.md)
 
 ## 🚨 License
 
