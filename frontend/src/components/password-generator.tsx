@@ -16,11 +16,13 @@ import { Switch } from './ui/switch';
 import { useToast } from './ui/use-toast';
 
 import { Button } from '@/components/ui/button';
+import { useCopyToClipboard } from '@/hooks/use-copy-clipboard';
 import { generatePassword } from '@/services/password/password.service';
 
 export default function PasswordGenerator() {
   const [generatedPassword, setGeneratedPassword] = useState('');
   const { toast } = useToast();
+  const [copiedText, copy] = useCopyToClipboard();
 
   const handleGeneratePassword = async () => {
     // TODO: implement form validation
@@ -41,9 +43,22 @@ export default function PasswordGenerator() {
     });
   };
 
-  // TODO: implement this
   const handleCopyToClipboard = () => {
-    console.log('🚀 ~ handleCopyToClipboard ~ TODO:');
+    copy(generatedPassword)
+      .then(() => {
+        toast({
+          title: 'Copied to clipboard',
+          description: copiedText,
+          variant: 'success',
+        });
+      })
+      .catch((error) => {
+        toast({
+          title: 'Fail to copy to clipboard',
+          description: error,
+          variant: 'destructive',
+        });
+      });
   };
 
   return (
