@@ -22,7 +22,11 @@ export const Navbar = () => {
         </Link>
         <div className="flex items-center gap-8">
           <ThemeToggle />
-          {session ? <UserDropdown session={session} /> : <SignInButton />}
+          {session ? (
+            <UserDropdown session={session} />
+          ) : (
+            <SignInButton size="sm" />
+          )}
         </div>
       </div>
     </header>

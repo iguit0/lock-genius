@@ -6,9 +6,17 @@ import { signIn, useSession } from 'next-auth/react';
 import { Icons } from '../icons';
 import { useToast } from '../ui/use-toast';
 
-import { Button } from '@/components/ui/button';
+import { Button, ButtonProps } from '@/components/ui/button';
 
-export const SignInButton = () => {
+type SignInButtonProps = ButtonProps & {
+  alternativeIcon?: boolean;
+};
+
+export const SignInButton = ({
+  fullWidth,
+  size,
+  alternativeIcon = false,
+}: SignInButtonProps) => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -33,20 +41,25 @@ export const SignInButton = () => {
   const handleSignIn = () => {
     setLoading(true);
 
-    signIn('github').catch(() => {
-      toast({
-        title: 'Authentication error',
-        description: 'Please try again',
-        variant: 'destructive',
+    signIn('github')
+      .catch(() => {
+        toast({
+          title: 'Authentication error',
+          description: 'Please try again',
+          variant: 'destructive',
+        });
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    });
   };
 
   return (
     <Button
       disabled={isLoading}
       className="flex gap-1"
-      size="sm"
+      fullWidth={fullWidth}
+      size={size}
       onClick={handleSignIn}
     >
       {isLoading ? (
@@ -56,7 +69,11 @@ export const SignInButton = () => {
         </div>
       ) : (
         <>
-          <Icons.githubAlternative className="size-6" />
+          {alternativeIcon ? (
+            <Icons.github className="size-6" />
+          ) : (
+            <Icons.githubAlternative className="size-6" />
+          )}
           Sign in
         </>
       )}
