@@ -11,6 +11,9 @@ This monorepository contains both the backend and frontend components, providing
 - [Lock Genius 🔐🛡️](#lock-genius-️)
   - [📌 Table of Contents](#-table-of-contents)
   - [🗣 Introduction](#-introduction)
+  - [✨ Features](#-features)
+  - [Backend](#backend)
+  - [Frontend](#frontend)
   - [🚀 Get Started](#-get-started)
     - [🖥 Installation](#-installation)
   - [🚨 License](#-license)
@@ -18,6 +21,33 @@ This monorepository contains both the backend and frontend components, providing
 ## 🗣 Introduction
 
 **Lock Genius** is the only password manager you need. Secure, open source, and beautifully designed.
+
+## ✨ Features
+
+
+## Backend
+
+- [x] Health routes
+- [x] Password routes
+- [ ] Vault routes
+- [x] Collection
+- [x] Dev tools: lint, check typing, etc.
+- [x] Makefile
+- [ ] Dockerization
+- [ ] Unit testing
+- [ ] Improve schemas validation
+
+## Frontend
+
+- [x] Social Login with GitHub
+- [x] Prisma and postgresql (schemas, etc)
+- [x] Devtools: ESLint, Prettier, etc.
+- [x] Generate password services integration
+- [x] Unit testing
+- [ ] Health routes services integration
+- [ ] Vault routes services integration
+- [ ] Dockerization
+- [ ] Improve services validation and types
 
 ## 🚀 Get Started
 

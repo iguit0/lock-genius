@@ -40,7 +40,7 @@ def generate_password(options: GeneratePasswordOptions):
     if not selected_sets:
         raise HTTPException(
             status_code=400,
-            detail="At least one character set should be selected",
+            detail="At least one option should be selected",
         )
 
     chars = "".join(selected_sets)
