@@ -11,7 +11,7 @@ Before running the application, make sure you have the following installed:
 - Docker
 - Docker Compose
 
-<!--## Installation
+## Installation
 
 1. Clone this repository:
 
@@ -26,7 +26,7 @@ Before running the application, make sure you have the following installed:
     docker-compose up --build
     ```
 
-3. The API will be accessible at `http://localhost:8000`.-->
+3. The API will be accessible at `http://localhost:8000`.
 
 ## Configuration
 
