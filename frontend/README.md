@@ -1,6 +1,6 @@
 # Frontend
 
-### Getting started
+## Getting started
 
 **Use the recommended node version which is >=18.x**
 
@@ -20,7 +20,19 @@ yarn
 pnpm i
 ```
 
-First, run the development server:
+### Configuration
+
+Copy env example:
+
+```shell
+    cp .env.example .env
+```
+
+Set env values according to your database.
+
+### Running
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -29,14 +41,6 @@ yarn dev
 # or
 pnpm dev
 ```
-
-Copy env example:
-
-```shell
-    cp .env.example .env
-```
-
-### Getting started
 
 Open [http://localhost:3000](http://localhost:3000) with your favorite browser.
 

@@ -2,7 +2,7 @@
 
 >👋 Say goodbye to weak passwords and hello to peace of mind
 
-<!--This monorepository contains both the backend and frontend components, providing a single, unified codebase for more efficient development and collaboration.-->
+This monorepository contains both the backend and frontend components, providing a single, unified codebase for more efficient development and collaboration.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
