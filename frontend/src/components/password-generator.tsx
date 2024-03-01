@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Icons } from './icons';
 import {
   Card,
@@ -11,13 +13,32 @@ import { Label } from './ui/label';
 import { Separator } from './ui/separator';
 // import { Slider } from './ui/slider';
 import { Switch } from './ui/switch';
+import { useToast } from './ui/use-toast';
 
 import { Button } from '@/components/ui/button';
+import { generatePassword } from '@/services/password/password.service';
 
 export default function PasswordGenerator() {
-  // TODO: implement this
-  const handleGeneratePassword = () => {
-    console.log('🚀 ~ handleGeneratePassword ~ TODO:');
+  const [generatedPassword, setGeneratedPassword] = useState('');
+  const { toast } = useToast();
+
+  const handleGeneratePassword = async () => {
+    // TODO: implement form validation
+    const { password } = await generatePassword({
+      params: {
+        length: 12,
+        lowercase: true,
+        numbers: true,
+        symbols: true,
+        uppercase: true,
+      },
+    });
+    setGeneratedPassword(password);
+    toast({
+      title: '🎉 Password generated',
+      description: 'Your new password has been generated!',
+      variant: 'success',
+    });
   };
 
   // TODO: implement this
@@ -43,8 +64,9 @@ export default function PasswordGenerator() {
           <Input
             id="password"
             type="text"
-            placeholder="🔑 Your generated password will appear here"
+            placeholder="🔑 Your generated password will appear here."
             readOnly
+            value={generatedPassword}
           />
           <div className="flex items-center justify-between gap-1">
             <Button

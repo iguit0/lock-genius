@@ -18,12 +18,12 @@ class GeneratePasswordOptions(BaseModel):
 
 @router.post(
     "/generate",
-    summary="Generate a strong password",
+    summary="Generate a random password",
     response_description="Returns a strong password based on the provided options",
     tags=["Password"],
 )
 def generate_password(options: GeneratePasswordOptions):
-    """Generate a strong password given the parameters"""
+    """Generate a random strong password given the parameters"""
     char_sets = {
         "uppercase": string.ascii_uppercase,
         "lowercase": string.ascii_lowercase,
