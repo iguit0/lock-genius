@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
+import { z } from 'zod';
 
 import { Icons } from './icons';
 import {
@@ -9,38 +13,80 @@ import {
   CardTitle,
 } from './ui/card';
 import { Input } from './ui/input';
-import { Label } from './ui/label';
 import { Separator } from './ui/separator';
 // import { Slider } from './ui/slider';
 import { Switch } from './ui/switch';
 import { useToast } from './ui/use-toast';
 
 import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { useCopyToClipboard } from '@/hooks/use-copy-clipboard';
 import { generatePassword } from '@/services/password/password.service';
+
+// length: number;
+// uppercase: boolean;
+// lowercase: boolean;
+// numbers: boolean;
+// symbols: boolean;
+
+const formSchema = z.object({
+  length: z.number().min(4).max(2048),
+  uppercase: z.boolean(),
+  lowercase: z.boolean(),
+  numbers: z.boolean(),
+  symbols: z.boolean(),
+});
 
 export default function PasswordGenerator() {
   const [generatedPassword, setGeneratedPassword] = useState('');
   const { toast } = useToast();
   const [copiedText, copy] = useCopyToClipboard();
 
-  const handleGeneratePassword = async () => {
-    // TODO: implement form validation
-    const { password } = await generatePassword({
-      params: {
-        length: 12,
-        lowercase: true,
-        numbers: true,
-        symbols: true,
-        uppercase: true,
-      },
-    });
-    setGeneratedPassword(password);
-    toast({
-      title: '🎉 Password generated',
-      description: 'Your new password has been generated!',
-      variant: 'success',
-    });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      length: 16,
+      uppercase: true,
+      lowercase: true,
+      numbers: true,
+      symbols: false,
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      const { password } = await generatePassword({
+        params: {
+          length: values.length,
+          lowercase: values.lowercase,
+          numbers: values.numbers,
+          symbols: values.symbols,
+          uppercase: values.uppercase,
+        },
+      });
+      setGeneratedPassword(password);
+      toast({
+        title: '🎉 Password generated',
+        description: 'Your new password has been generated!',
+        variant: 'success',
+      });
+    } catch (err) {
+      // TODO: improve types if request throw an error
+      const error = err as AxiosError<{ detail: string }>;
+      console.log(err);
+      toast({
+        title: 'Fail to generate password',
+        description: error.response?.data?.detail || error.message,
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleCopyToClipboard = () => {
@@ -73,59 +119,103 @@ export default function PasswordGenerator() {
       </CardHeader>
 
       <Separator className="my-1" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <CardContent className="mt-2 space-y-8 p-4">
+            <div className="flex items-center space-x-2">
+              <Input
+                id="password"
+                type="text"
+                placeholder="🔑 Your generated password will appear here."
+                readOnly
+                value={generatedPassword}
+              />
+              <div className="flex items-center justify-between gap-1">
+                <Button size="icon" id="generate" variant="ghost" type="submit">
+                  <Icons.refresh className="size-5" />
+                </Button>
+                <Button
+                  size="icon"
+                  id="copy"
+                  variant="ghost"
+                  onClick={handleCopyToClipboard}
+                  disabled={!generatedPassword}
+                >
+                  <Icons.copy className="size-5" />
+                </Button>
+              </div>
+            </div>
 
-      <CardContent className="mt-2 space-y-8 p-4">
-        <div className="flex items-center space-x-2">
-          <Input
-            id="password"
-            type="text"
-            placeholder="🔑 Your generated password will appear here."
-            readOnly
-            value={generatedPassword}
-          />
-          <div className="flex items-center justify-between gap-1">
-            <Button
-              size="icon"
-              id="generate"
-              variant="ghost"
-              onClick={handleGeneratePassword}
-            >
-              <Icons.refresh className="size-5" />
-            </Button>
-            <Button
-              size="icon"
-              id="copy"
-              variant="ghost"
-              onClick={handleCopyToClipboard}
-            >
-              <Icons.copy className="size-5" />
-            </Button>
-          </div>
-        </div>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="uppercase"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <FormLabel>Uppercase (A-Z)</FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-        <div className="grid grid-cols-2 gap-8 p-4">
-          <div className="flex items-center space-x-2">
-            <Switch id="uppercase" />
-            <Label htmlFor="uppercase">Uppercase (A-Z)</Label>
-          </div>
+              <FormField
+                control={form.control}
+                name="numbers"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <FormLabel>Numbers (0-9)</FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <div className="flex items-center space-x-2">
-            <Switch defaultChecked id="numbers" />
-            <Label htmlFor="numbers">Numbers (0-9)</Label>
-          </div>
+              <FormField
+                control={form.control}
+                name="lowercase"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <FormLabel>Lowercase (a-z)</FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <div className="flex items-center space-x-2">
-            <Switch defaultChecked id="lowercase" />
-            <Label htmlFor="lowercase">Lowercase (a-z)</Label>
-          </div>
+              <FormField
+                control={form.control}
+                name="symbols"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                    <FormLabel>Symbols (!@#$%^&*)</FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          <div className="flex items-center space-x-2">
-            <Switch id="symbols" />
-            <Label htmlFor="symbols">Symbols (!@#$%^&*)</Label>
-          </div>
-        </div>
-
-        {/*
+            {/*
         // TODO: implement
         <div className="mt-8 space-y-4">
           <Label className="inline" htmlFor="length">
@@ -133,7 +223,9 @@ export default function PasswordGenerator() {
           </Label>
           <Slider defaultValue={[10]} id="length" max={20} min={6} />
         </div> */}
-      </CardContent>
+          </CardContent>
+        </form>
+      </Form>
     </Card>
   );
 }

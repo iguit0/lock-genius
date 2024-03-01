@@ -1,5 +1,3 @@
-import { AxiosResponse } from 'axios';
-
 import api from '../api';
 import {
   GeneratePasswordRequest,
@@ -11,14 +9,5 @@ export const generatePassword = async ({
 }: {
   params: GeneratePasswordRequest;
 }): Promise<GeneratePasswordResponse> => {
-  try {
-    const { data }: AxiosResponse<GeneratePasswordResponse> = await api.post(
-      '/passwords/generate',
-      params
-    );
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-    throw error;
-  }
+  return await api.post('/passwords/generate', params).then((res) => res.data);
 };
