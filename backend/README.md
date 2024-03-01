@@ -36,6 +36,7 @@ Before running the application, make sure you have the following installed:
 
 ## Configuration
 
+
 1. Create a virtual environment
 
 ```shell
@@ -73,6 +74,8 @@ Run lint and type checkers to reformat files before commit
 ```shell
     make run-dev
 ```
+
+See [Makefile](./Makefile) for more details.
 
 To open documentation navigate to `http://localhost:8000/docs`
 
