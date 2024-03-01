@@ -30,7 +30,6 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     siteName: siteConfig.title,
-    images: '/opengraph-image.png',
     type: 'website',
     locale: 'en_US',
   },
@@ -38,7 +37,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: siteConfig.title,
     description: siteConfig.description,
-    images: '/opengraph-image.png',
   },
 };
 
