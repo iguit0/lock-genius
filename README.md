@@ -17,7 +17,7 @@
 
 ## 🗣 Introduction
 
-**Lock Genius** is your ultimate solution for secure password management. With its encrypted vault and advanced password generation capabilities, we make sure that your digital accounts remain protected at all times.
+**Lock Genius** is the only password manager you need. Secure, open source, and beautifully designed.
 
 ## 🚀 Get Started
 

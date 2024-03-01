@@ -1,4 +1,12 @@
-import { BookLock, Copy, LogOut, LucideProps, Moon, Sun } from 'lucide-react';
+import {
+  BookLock,
+  Copy,
+  Loader,
+  LogOut,
+  LucideProps,
+  Moon,
+  Sun,
+} from 'lucide-react';
 
 export const Icons = {
   sun: Sun,
@@ -6,6 +14,7 @@ export const Icons = {
   logOut: LogOut,
   copy: Copy,
   bookLock: BookLock,
+  loader: Loader,
   githubAlternative: (props: LucideProps) => (
     <svg
       {...props}

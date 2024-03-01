@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 
 import { Footer } from '@/components/footer';
 import { Navbar } from '@/components/navbar/navbar';
+import { Provider } from '@/components/provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { siteConfig } from '@/lib/constant';
@@ -45,10 +46,12 @@ const RootLayout = ({ children }: PropsWithChildren) => {
     <html lang="en" suppressHydrationWarning>
       <body className={cn('min-h-screen font-sans', fonts)}>
         <ThemeProvider attribute="class">
-          <Navbar />
-          {children}
-          <Footer />
-          <Toaster />
+          <Provider>
+            <Navbar />
+            {children}
+            <Footer />
+            <Toaster />
+          </Provider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,16 +1,17 @@
+'use client';
+
 import Link from 'next/link';
-import { getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 
 import { Icons } from '../icons';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import { SignInButton } from '@/components/navbar/sign-in-button';
 import { ThemeToggle } from '@/components/navbar/theme-toggle';
 import { UserDropdown } from '@/components/navbar/user-dropdown';
 import { siteConfig } from '@/lib/constant';
 
-export const Navbar = async () => {
-  const session = await getServerSession(authOptions);
+export const Navbar = () => {
+  const { data: session } = useSession();
 
   return (
     <header className="flex h-14 w-full shrink-0 items-center border-b px-4 md:px-6">

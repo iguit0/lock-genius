@@ -1,27 +1,21 @@
 import { Icons } from './icons';
 
-import { Badge } from '@/components/ui/badge';
+// import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
 export default function PasswordGenerator() {
   return (
-    <div className="mx-auto max-w-sm rounded-lg p-6">
+    <div className="mx-auto max-w-sm p-6">
       <div className="mb-4">
         <label className="mb-2 block text-sm font-bold" htmlFor="password">
           Password
         </label>
-        <div className="flex items-center rounded p-2">
-          <input
-            className="flex-1 outline-none"
-            id="password"
-            readOnly
-            type="text"
-            value="some password"
-          />
+        <div className="flex items-center  p-2">
+          <input id="password" readOnly type="text" value="some password" />
           <Icons.copy />
         </div>
       </div>
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <div className="mb-2">
           <span className="text-sm font-bold">Character set </span>
           <span className="text-red-500">*</span>
@@ -44,10 +38,10 @@ export default function PasswordGenerator() {
           min="0"
           type="range"
         />
-      </div>
-      <div className="mb-4 flex items-center justify-between">
-        <Button variant="ghost">Save</Button>
-        <Button>Generate</Button>
+      </div> */}
+      <div className="mt-4 flex items-center justify-between">
+        {/* <Button variant="ghost">Save</Button> */}
+        <Button className="w-full">Generate</Button>
       </div>
     </div>
   );
