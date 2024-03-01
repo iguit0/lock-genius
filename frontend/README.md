@@ -39,3 +39,7 @@ Copy env example:
 ### Getting started
 
 Open [http://localhost:3000](http://localhost:3000) with your favorite browser.
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/license/mit/). Refer to the [LICENSE](../LICENSE) file for more information.

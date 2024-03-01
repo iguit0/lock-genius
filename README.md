@@ -38,6 +38,7 @@ To clone the repository to your local machine, follow these steps:
 
 Once you have cloned the repository, you may need to install the project's dependencies. Follow the instructions below to set up the backend and frontend.
 
+- [Backend instructions](./backend/README.md)
 - [Frontend instructions](./frontend/README.md)
 
 ## 🚨 License
