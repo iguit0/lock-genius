@@ -15,6 +15,16 @@ import { Switch } from './ui/switch';
 import { Button } from '@/components/ui/button';
 
 export default function PasswordGenerator() {
+  // TODO: implement this
+  const handleGeneratePassword = () => {
+    console.log('🚀 ~ handleGeneratePassword ~ TODO:');
+  };
+
+  // TODO: implement this
+  const handleCopyToClipboard = () => {
+    console.log('🚀 ~ handleCopyToClipboard ~ TODO:');
+  };
+
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader className="mb-3 space-y-2">
@@ -37,10 +47,20 @@ export default function PasswordGenerator() {
             readOnly
           />
           <div className="flex items-center justify-between gap-1">
-            <Button size="icon" id="generate" variant="ghost">
+            <Button
+              size="icon"
+              id="generate"
+              variant="ghost"
+              onClick={handleGeneratePassword}
+            >
               <Icons.refresh className="size-5" />
             </Button>
-            <Button size="icon" id="copy" variant="ghost">
+            <Button
+              size="icon"
+              id="copy"
+              variant="ghost"
+              onClick={handleCopyToClipboard}
+            >
               <Icons.copy className="size-5" />
             </Button>
           </div>
