@@ -1,9 +1,24 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
+
+import { Icons } from '../icons';
 
 import { Button } from '@/components/ui/button';
 
 export const SignInButton = () => {
-  return <Button onClick={() => signIn('github')}>Sign in</Button>;
+  const { status } = useSession({
+    required: true,
+  });
+
+  return (
+    <Button
+      disabled={status === 'loading'}
+      className="flex gap-1"
+      onClick={() => signIn('github')}
+    >
+      <Icons.githubAlternative className="size-6" />
+      Sign in with GitHub
+    </Button>
+  );
 };

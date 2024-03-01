@@ -1,4 +1,4 @@
-import PasswordGenerator from '@/components/password-generator';
+// import PasswordGenerator from '@/components/password-generator';
 
 const Home = () => {
   return (
@@ -10,9 +10,9 @@ const Home = () => {
         A simple password generator
       </p>
 
-      <div className="mt-8 flex gap-4">
+      {/* <div className="mt-8 flex gap-4">
         <PasswordGenerator />
-      </div>
+      </div> */}
     </section>
   );
 };
