@@ -2,6 +2,11 @@
 
 A lightweight REST API built using FastAPI to serve Lock Genius's frontend. It allows users to store and manage their login credentials securely.
 
+## Features
+- CRUD operations for managing passwords vaults (Create, Read, Update, Delete)
+- Endpoint to generate strong passwords with customizable options (length, uppercase, lowercase, numbers and symbols)
+- Dockerized for easy deployment and scalability
+
 ## Prerequisites
 
 Before running the application, make sure you have the following installed:
