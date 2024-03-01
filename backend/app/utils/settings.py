@@ -1,7 +1,7 @@
 from typing import Set
 
-from pydantic_settings import BaseSettings
 from pydantic import Field
+from pydantic_settings import BaseSettings
 
 from app.utils.release import APP_VERSION
 

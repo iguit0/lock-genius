@@ -1,0 +1,15 @@
+@base_url=http://localhost:8000/api/v1
+
+
+###
+# @name generate-password
+POST {{base_url}}/passwords/generate
+Content-Type: application/json
+
+{
+  "length": 16,
+  "uppercase": true,
+  "lowercase": true,
+  "numbers": true,
+  "symbols": true
+}

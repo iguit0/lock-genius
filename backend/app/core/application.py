@@ -5,19 +5,16 @@ from fastapi.middleware.cors import CORSMiddleware
 def configure_middlewares(app: FastAPI) -> None:
     app.add_middleware(
         CORSMiddleware,
-        allow_origins={"*"},
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
     )
 
 
 def configure_routes(app: FastAPI) -> None:
     """Configure routes for the application"""
-    from app.routers.vault_router import router as vault_router
     from app.routers.health_router import router as health_router
+    from app.routers.password_router import router as password_router
+    from app.routers.vault_router import router as vault_router
 
-    routes = (health_router, vault_router)
+    routes = (health_router, vault_router, password_router)
 
     for router in routes:
         app.include_router(router)
