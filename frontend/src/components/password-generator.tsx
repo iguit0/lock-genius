@@ -16,6 +16,7 @@ import { Input } from './ui/input';
 import { Separator } from './ui/separator';
 // import { Slider } from './ui/slider';
 import { Switch } from './ui/switch';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { useToast } from './ui/use-toast';
 
 import { Button } from '@/components/ui/button';
@@ -29,12 +30,6 @@ import {
 } from '@/components/ui/form';
 import { useCopyToClipboard } from '@/hooks/use-copy-clipboard';
 import { generatePassword } from '@/services/password/password.service';
-
-// length: number;
-// uppercase: boolean;
-// lowercase: boolean;
-// numbers: boolean;
-// symbols: boolean;
 
 const formSchema = z.object({
   length: z.number().min(4).max(2048),
@@ -122,28 +117,51 @@ export default function PasswordGenerator() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <CardContent className="mt-2 space-y-8 p-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex w-full items-center space-x-2">
               <Input
                 id="password"
                 type="text"
-                placeholder="🔑 Your generated password will appear here."
+                placeholder="🔑 Your generated password will appear here"
                 readOnly
                 value={generatedPassword}
+                className="hover:cursor-pointer focus-visible:outline-none focus-visible:ring-0"
+                onClick={(e) => {
+                  if (!generatedPassword) {
+                    return;
+                  }
+                  e.stopPropagation();
+                  handleCopyToClipboard();
+                }}
               />
-              <div className="flex items-center justify-between gap-1">
-                <Button size="icon" id="generate" variant="ghost" type="submit">
-                  <Icons.refresh className="size-5" />
-                </Button>
-                <Button
-                  size="icon"
-                  id="copy"
-                  variant="ghost"
-                  onClick={handleCopyToClipboard}
-                  disabled={!generatedPassword}
-                >
-                  <Icons.copy className="size-5" />
-                </Button>
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="icon"
+                    id="generate"
+                    variant="ghost"
+                    type="submit"
+                  >
+                    <TooltipContent>Generate</TooltipContent>
+                    <Icons.refresh className="size-5" />
+                  </Button>
+                </TooltipTrigger>
+              </Tooltip>
+              {generatedPassword && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      id="copy"
+                      variant="ghost"
+                      onClick={handleCopyToClipboard}
+                      disabled={!generatedPassword}
+                    >
+                      <TooltipContent>Copy</TooltipContent>
+                      <Icons.copy className="size-5" />
+                    </Button>
+                  </TooltipTrigger>
+                </Tooltip>
+              )}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
@@ -152,7 +170,12 @@ export default function PasswordGenerator() {
                 name="uppercase"
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <FormLabel>Uppercase (A-Z)</FormLabel>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <FormLabel>Uppercase</FormLabel>
+                      </TooltipTrigger>
+                      <TooltipContent>(A-Z)</TooltipContent>
+                    </Tooltip>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -169,7 +192,12 @@ export default function PasswordGenerator() {
                 name="numbers"
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <FormLabel>Numbers (0-9)</FormLabel>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <FormLabel>Numbers</FormLabel>
+                      </TooltipTrigger>
+                      <TooltipContent>(0-9)</TooltipContent>
+                    </Tooltip>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -186,7 +214,12 @@ export default function PasswordGenerator() {
                 name="lowercase"
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <FormLabel>Lowercase (a-z)</FormLabel>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <FormLabel>Lowercase</FormLabel>
+                      </TooltipTrigger>
+                      <TooltipContent>(a-z)</TooltipContent>
+                    </Tooltip>
                     <FormControl>
                       <Switch
                         checked={field.value}
@@ -203,7 +236,12 @@ export default function PasswordGenerator() {
                 name="symbols"
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <FormLabel>Symbols (!@#$%^&*)</FormLabel>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <FormLabel>Symbols</FormLabel>
+                      </TooltipTrigger>
+                      <TooltipContent>!@#$%^&*</TooltipContent>
+                    </Tooltip>
                     <FormControl>
                       <Switch
                         checked={field.value}

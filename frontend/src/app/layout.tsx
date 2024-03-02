@@ -8,6 +8,7 @@ import { Navbar } from '@/components/navbar/navbar';
 import { Provider } from '@/components/provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { siteConfig } from '@/lib/constant';
 import { fonts } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
@@ -47,10 +48,12 @@ const RootLayout = ({ children }: PropsWithChildren) => {
       <body className={cn('min-h-screen font-sans', fonts)}>
         <ThemeProvider attribute="class">
           <Provider>
-            <Navbar />
-            {children}
-            <Footer />
-            <Toaster />
+            <TooltipProvider>
+              <Navbar />
+              {children}
+              <Footer />
+              <Toaster />
+            </TooltipProvider>
           </Provider>
         </ThemeProvider>
       </body>
