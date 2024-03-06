@@ -42,7 +42,7 @@ const formSchema = z.object({
 export default function PasswordGenerator() {
   const [generatedPassword, setGeneratedPassword] = useState('');
   const { toast } = useToast();
-  const [copiedText, copy] = useCopyToClipboard();
+  const [copy] = useCopyToClipboard();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,7 +68,7 @@ export default function PasswordGenerator() {
       });
       setGeneratedPassword(password);
       toast({
-        title: '🎉 Password generated',
+        title: '✨ Password generated',
         description: 'Your new password has been generated!',
         variant: 'success',
       });
@@ -88,14 +88,14 @@ export default function PasswordGenerator() {
     copy(generatedPassword)
       .then(() => {
         toast({
-          title: 'Copied to clipboard',
-          description: copiedText,
+          title: '🎉 Copied to clipboard',
+          description: generatedPassword,
           variant: 'success',
         });
       })
       .catch((error) => {
         toast({
-          title: 'Fail to copy to clipboard',
+          title: '😓 Fail to copy to clipboard',
           description: error,
           variant: 'destructive',
         });
@@ -155,6 +155,7 @@ export default function PasswordGenerator() {
                       variant="ghost"
                       onClick={handleCopyToClipboard}
                       disabled={!generatedPassword}
+                      type="button"
                     >
                       <TooltipContent>Copy</TooltipContent>
                       <Icons.copy className="size-5" />

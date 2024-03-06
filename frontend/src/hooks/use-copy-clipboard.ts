@@ -32,7 +32,7 @@ type CopyFn = (text: string) => Promise<boolean>;
  *     }
  *   });
  */
-export const useCopyToClipboard = (): [CopiedValue, CopyFn] => {
+export const useCopyToClipboard = (): [CopyFn, CopiedValue] => {
   const [copiedText, setCopiedText] = useState<CopiedValue>(null);
 
   const copy: CopyFn = useCallback(async (text) => {
@@ -53,5 +53,5 @@ export const useCopyToClipboard = (): [CopiedValue, CopyFn] => {
     }
   }, []);
 
-  return [copiedText, copy];
+  return [copy, copiedText];
 };
