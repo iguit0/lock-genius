@@ -1,5 +1,6 @@
 @base_url=http://localhost:8000/api/v1
 
+# --- Password
 
 ###
 # @name generate-password
@@ -13,3 +14,16 @@ Content-Type: application/json
   "numbers": true,
   "symbols": true
 }
+
+
+# --- Utils
+
+###
+# @name get-version
+GET {{base_url}}/health/version
+Content-Type: application/json
+
+###
+# @name healthcheck
+GET {{base_url}}/health
+Content-Type: application/json

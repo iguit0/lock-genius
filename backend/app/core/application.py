@@ -45,6 +45,10 @@ def create_fastapi_application() -> FastAPI:
                 "name": "Utils",
                 "description": "Utility Services",
             },
+            {
+                "name": "Password",
+                "description": "Password Services",
+            },
         ],
     )
 
