@@ -1,11 +1,10 @@
-import { getServerSession } from 'next-auth/next';
-
-import { authOptions } from './api/auth/[...nextauth]/auth-options';
+'use client';
+import { useSession } from 'next-auth/react';
 
 import { HomeActions } from '@/components/home/actions';
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
+export default function Home() {
+  const { data: session } = useSession();
 
   const isAuthenticated = !!session;
 
@@ -25,7 +24,7 @@ export default async function Home() {
         )}
       </p>
 
-      <HomeActions isAuthenticated={isAuthenticated} />
+      {!isAuthenticated && <HomeActions />}
     </section>
   );
 }

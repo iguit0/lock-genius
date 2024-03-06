@@ -6,6 +6,10 @@ export type GeneratePasswordRequest = {
   symbols: boolean;
 };
 
+export type GeneratePasswordRequestParams = {
+  params: GeneratePasswordRequest;
+};
+
 export type GeneratePasswordResponse = {
   password: string;
 };
