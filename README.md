@@ -2,7 +2,7 @@
 
 >👋 Say goodbye to weak passwords and hello to peace of mind
 
-This monorepository contains both the backend and frontend components, providing a single, unified codebase for more efficient development and collaboration.
+This mono-repository contains both the backend and frontend, providing a single unified codebase for more efficient development and collaboration.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -49,8 +49,6 @@ This monorepository contains both the backend and frontend components, providing
 - [ ] Improve services validation and types
 
 ## 🚀 Get Started
-
->Soon there will be a guided video to install.
 
 To clone the repository to your local machine, follow these steps:
 1. Open a terminal.
