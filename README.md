@@ -24,7 +24,7 @@ This mono-repository contains both the backend and frontend, providing a single 
 
 ## ✨ Features
 
-## Backend
+### Backend
 
 - [x] Health routes
 - [x] Password routes
@@ -36,7 +36,7 @@ This mono-repository contains both the backend and frontend, providing a single 
 - [ ] Unit testing
 - [ ] Improve schemas validation
 
-## Frontend
+### Frontend
 
 - [x] Social Login with GitHub
 - [x] Prisma and postgresql (schemas, etc)
