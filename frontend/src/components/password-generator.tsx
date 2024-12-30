@@ -121,7 +121,7 @@ export default function PasswordGenerator() {
               <Input
                 id="password"
                 type="text"
-                placeholder="🔑 Your generated password will appear here"
+                placeholder="🔑  Your generated password will appear here..."
                 readOnly
                 value={generatedPassword}
                 className="hover:cursor-pointer focus-visible:outline-none focus-visible:ring-0"
