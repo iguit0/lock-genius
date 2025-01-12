@@ -109,7 +109,7 @@ export default function PasswordGenerator() {
           Password Generator
         </CardTitle>
         <CardDescription>
-          Generate a secure password based on selected options
+          Generate a secure password based on selected options.
         </CardDescription>
       </CardHeader>
 
@@ -121,7 +121,7 @@ export default function PasswordGenerator() {
               <Input
                 id="password"
                 type="text"
-                placeholder="🔑  Your generated password will appear here..."
+                placeholder="🔑  Your new password will appear here..."
                 readOnly
                 value={generatedPassword}
                 className="hover:cursor-pointer focus-visible:outline-none focus-visible:ring-0"
