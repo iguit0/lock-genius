@@ -48,7 +48,7 @@ pytest-responses==0.5.1
 python-dotenv==1.0.1
 python-multipart==0.0.20
 PyYAML==6.0.2
-requests==2.32.3
+requests==2.32.4
 responses==0.25.3
 rich==13.9.4
 rich-toolkit==0.12.0
