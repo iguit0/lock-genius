@@ -20,17 +20,15 @@ describe('Homepage', () => {
       data: null,
     });
 
-    const { getByRole, getByText } = render(<Home />);
+    const { getByText, getByRole } = render(<Home />);
 
     const heading = getByText(/say goodbye to weak passwords/i);
-    const continueWithoutAccount = getByText(/continue without an account/i);
-    const signInBtn = getByRole('button', {
-      name: /sign in/i,
+    const continueWithoutAccount = getByRole('link', {
+      name: /continue without an account/i,
     });
 
     expect(heading).toBeInTheDocument();
     expect(continueWithoutAccount).toBeInTheDocument();
-    expect(signInBtn).toBeInTheDocument();
   });
 
   it('should render authenticated', () => {
