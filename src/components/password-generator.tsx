@@ -124,7 +124,7 @@ export default function PasswordGenerator() {
                 placeholder="🔑  Your new password will appear here..."
                 readOnly
                 value={generatedPassword}
-                className="hover:cursor-pointer focus-visible:outline-none focus-visible:ring-0"
+                className="hover:cursor-pointer focus-visible:outline-hidden focus-visible:ring-0"
                 onClick={(e) => {
                   if (!generatedPassword) {
                     return;

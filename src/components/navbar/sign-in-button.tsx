@@ -57,22 +57,22 @@ export const SignInButton = ({
   return (
     <Button
       disabled={isLoading}
-      className="flex gap-1"
+      className="flex gap-2"
       fullWidth={fullWidth}
       size={size}
       onClick={handleSignIn}
     >
       {isLoading ? (
-        <div className="flex items-center gap-3 text-sm">
-          <Icons.loader className="animate-spin" />
+        <div className="flex items-center gap-2 text-sm">
+          <Icons.loader className="size-4 animate-spin" />
           Processing
         </div>
       ) : (
         <>
           {alternativeIcon ? (
-            <Icons.github className="size-6" />
+            <Icons.github className="size-4" />
           ) : (
-            <Icons.githubAlternative className="size-6" />
+            <Icons.githubAlternative className="size-4" />
           )}
           Sign in
         </>

@@ -11,7 +11,7 @@ type UserDropdownInfoProps = {
 
 export const UserDropdownInfo = ({ userInfo }: UserDropdownInfoProps) => {
   return (
-    <div className="flex items-center gap-4 p-4">
+    <div className="flex items-center gap-3 p-4">
       <Avatar className="size-10">
         <AvatarImage alt={userInfo.image.alt} src={userInfo.image.src} />
         <AvatarFallback>

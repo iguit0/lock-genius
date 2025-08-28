@@ -43,11 +43,11 @@ export const UserDropdown = ({ session }: { session: Session }) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Image
-          className="overflow-hidden rounded-full border-2 border-slate-700 hover:cursor-pointer dark:border-white"
           alt={imgAlt}
           src={imgSrc}
           width={32}
           height={32}
+          className="size-8 overflow-hidden rounded-full border-2 border-slate-700 hover:cursor-pointer dark:border-white"
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

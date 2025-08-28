@@ -6,7 +6,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:tailwindcss/recommended',
   ],
   plugins: ['simple-import-sort', 'prettier', '@typescript-eslint'],
   rules: {
@@ -17,7 +16,6 @@ module.exports = {
       },
     ],
     'sort-imports': 'off',
-    'tailwindcss/no-custom-classname': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     'simple-import-sort/imports': [
@@ -36,11 +34,5 @@ module.exports = {
         ],
       },
     ],
-  },
-  settings: {
-    tailwindcss: {
-      callees: ['cn'],
-      config: 'tailwind.config.js',
-    },
   },
 };
