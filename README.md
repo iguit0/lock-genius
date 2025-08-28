@@ -1,7 +1,5 @@
 # Lock Genius 🔐🛡️
 
->👋 Say goodbye to weak passwords and hello to peace of mind
-
 This mono-repository contains both the backend and frontend, providing a single unified codebase for more efficient development and collaboration.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -14,13 +12,12 @@ This mono-repository contains both the backend and frontend, providing a single 
   - [✨ Features](#-features)
     - [Backend](#backend)
     - [Frontend](#frontend)
-  - [🚀 Get Started](#-get-started)
-    - [🖥 Installation](#-installation)
+  - [🖥 Installation](#-installation)
   - [🚨 License](#-license)
 
 ## 🗣 Introduction
 
-**Lock Genius** is the only password manager you need. Secure, open source, and beautifully designed.
+**Lock Genius** is a simple password manager you need.
 
 ## ✨ Features
 
@@ -47,24 +44,9 @@ This mono-repository contains both the backend and frontend, providing a single 
 - [ ] Vault routes services integration
 - [ ] Improve services validation and types
 
-## 🚀 Get Started
+## 🖥 Installation
 
-To clone the repository to your local machine, follow these steps:
-1. Open a terminal.
-2. Navigate to the directory where you want to clone the repository.
-3. Execute the following command:
-
-```shell
-    git clone https://github.com/iguit0/lock-genius.git
-```
-
-```bash
-    cd lock-genius
-```
-
-### 🖥 Installation
-
-Once you have cloned the repository, you may need to install the project's dependencies. Follow the instructions below to set up the backend and frontend.
+Once you have cloned the repository, you need to install the project's dependencies. Follow the instructions below to set up the backend and frontend.
 
 - [Backend instructions](./backend/README.md)
 - [Frontend instructions](./frontend/README.md)
