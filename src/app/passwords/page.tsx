@@ -192,7 +192,11 @@ export default function PasswordsPage() {
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button size="sm" variant="destructive">
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          className="text-white"
+                        >
                           <Icons.trash className="size-4 mr-2" />
                           Delete
                         </Button>
