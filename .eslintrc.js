@@ -18,6 +18,7 @@ module.exports = {
     'sort-imports': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
+    'react-hooks/exhaustive-deps': 'warn',
     'simple-import-sort/imports': [
       2,
       {

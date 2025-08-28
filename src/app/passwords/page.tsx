@@ -88,7 +88,8 @@ export default function PasswordsPage() {
     if (status === 'authenticated' || status === 'unauthenticated') {
       loadPasswords();
     }
-  }, [status, loadPasswords]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
 
   const handleDeletePassword = async (id: string) => {
     try {
