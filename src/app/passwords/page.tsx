@@ -15,6 +15,17 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Icons } from '@/components/icons';
 import {
   usePasswordStorage,
@@ -38,8 +49,25 @@ export default function PasswordsPage() {
   const loadPasswords = async () => {
     try {
       setLoading(true);
-      const fetchedPasswords = await getPasswords();
-      setPasswords(fetchedPasswords);
+
+      if (session) {
+        // For authenticated users, fetch from API
+        const fetchedPasswords = await getPasswords();
+        setPasswords(fetchedPasswords);
+      } else {
+        // For unauthenticated users, read directly from localStorage
+        const stored = localStorage.getItem('lock-genius-passwords');
+        if (stored) {
+          const passwords = JSON.parse(stored);
+          const parsedPasswords = passwords.map((p: any) => ({
+            ...p,
+            createdAt: new Date(p.createdAt),
+          }));
+          setPasswords(parsedPasswords);
+        } else {
+          setPasswords([]);
+        }
+      }
     } catch (error) {
       toast({
         title: 'Error loading passwords',
@@ -150,21 +178,41 @@ export default function PasswordsPage() {
                       <Icons.copy className="size-4 mr-2" />
                       Copy
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDeletePassword(password.id)}
-                    >
-                      <Icons.trash className="size-4 mr-2" />
-                      Delete
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button size="sm" variant="destructive">
+                          <Icons.trash className="size-4 mr-2" />
+                          Delete
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your password.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDeletePassword(password.id)}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
                 <CardDescription>
                   Generated on{' '}
                   {format(
                     new Date(password.createdAt),
-                    "MMMM dd, yyyy 'at' HH:mm"
+                    "MMMM dd, yyyy 'at' HH:mm zzz"
                   )}
                 </CardDescription>
               </CardHeader>
