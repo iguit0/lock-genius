@@ -1,9 +1,0 @@
-.coverage
-.env
-.mypy_cache/
-.pytest_cache/
-.vscode/
-/**/__pycache__/
-coverage.xml
-venv/
-.idea
