@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 import { Icons } from './icons';
 import { ShineBorder } from './magicui/shine-border';
+import { BorderBeam } from './magicui/border-beam';
 import {
   Card,
   CardContent,
@@ -138,50 +139,83 @@ export default function PasswordGenerator() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <CardContent className="mt-2 space-y-8 p-8">
               <div className="flex w-full items-center space-x-2">
-                <Input
-                  id="password"
-                  type="text"
-                  placeholder="🔑  Your new password will appear here..."
-                  readOnly
-                  value={generatedPassword}
-                  className="hover:cursor-pointer focus-visible:outline-hidden focus-visible:ring-0"
-                  onClick={(e) => {
-                    if (!generatedPassword) {
-                      return;
-                    }
-                    e.stopPropagation();
-                    handleCopyToClipboard();
-                  }}
-                />
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      size="icon"
-                      id="generate"
-                      variant="ghost"
-                      type="submit"
-                    >
-                      <TooltipContent>Generate</TooltipContent>
-                      <Icons.refresh className="size-5" />
-                    </Button>
-                  </TooltipTrigger>
-                </Tooltip>
-                {generatedPassword && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        size="icon"
-                        id="copy"
-                        variant="ghost"
-                        onClick={handleCopyToClipboard}
-                        disabled={!generatedPassword}
-                        type="button"
-                      >
-                        <TooltipContent>Copy</TooltipContent>
-                        <Icons.copy className="size-5" />
-                      </Button>
-                    </TooltipTrigger>
-                  </Tooltip>
+                <div
+                  className={`relative ${
+                    generatedPassword
+                      ? 'flex-1'
+                      : 'flex-1 max-w-[calc(100%-120px)]'
+                  }`}
+                >
+                  <Input
+                    id="password"
+                    type="text"
+                    placeholder="🔑  Your new password will appear here..."
+                    readOnly
+                    value={generatedPassword}
+                    className="hover:cursor-pointer focus-visible:outline-hidden focus-visible:ring-0 w-full"
+                    onClick={(e) => {
+                      if (!generatedPassword) {
+                        return;
+                      }
+                      e.stopPropagation();
+                      handleCopyToClipboard();
+                    }}
+                  />
+                  {generatedPassword && (
+                    <BorderBeam
+                      size={40}
+                      initialOffset={20}
+                      colorFrom="#6444d5"
+                      colorTo="#6d65fe"
+                      borderWidth={2}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 60,
+                        damping: 20,
+                      }}
+                    />
+                  )}
+                </div>
+                {!generatedPassword ? (
+                  <Button
+                    id="generate"
+                    variant="default"
+                    type="submit"
+                    className="min-w-[120px]"
+                  >
+                    Generate
+                  </Button>
+                ) : (
+                  <>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="icon"
+                          id="generate"
+                          variant="ghost"
+                          type="submit"
+                        >
+                          <TooltipContent>Generate</TooltipContent>
+                          <Icons.refresh className="size-5" />
+                        </Button>
+                      </TooltipTrigger>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="icon"
+                          id="copy"
+                          variant="ghost"
+                          onClick={handleCopyToClipboard}
+                          disabled={!generatedPassword}
+                          type="button"
+                        >
+                          <TooltipContent>Copy</TooltipContent>
+                          <Icons.copy className="size-5" />
+                        </Button>
+                      </TooltipTrigger>
+                    </Tooltip>
+                  </>
                 )}
               </div>
 
