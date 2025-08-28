@@ -5,8 +5,8 @@ import { AxiosError } from 'axios';
 import { z } from 'zod';
 
 import { Icons } from './icons';
-import { ShineBorder } from './magicui/shine-border';
 import { BorderBeam } from './magicui/border-beam';
+import { ShineBorder } from './magicui/shine-border';
 import {
   Card,
   CardContent,
