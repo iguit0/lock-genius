@@ -168,12 +168,12 @@ export default function PasswordsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4">
+        <div className="flex flex-col items-center gap-6 md:grid md:items-start">
           {passwords.map((password) => (
-            <Card key={password.id}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
+            <Card key={password.id} className="w-full max-w-2xl">
+              <CardHeader className="pb-4">
+                <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                  <div className="flex items-center space-x-3">
                     <CardTitle className="text-lg">
                       Generated Password
                     </CardTitle>
@@ -181,7 +181,7 @@ export default function PasswordsPage() {
                       {password.length} characters
                     </Badge>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
                     <Button
                       size="sm"
                       variant="outline"
@@ -220,7 +220,7 @@ export default function PasswordsPage() {
                     </AlertDialog>
                   </div>
                 </div>
-                <CardDescription>
+                <CardDescription className="mt-2">
                   Generated on{' '}
                   {format(
                     new Date(password.createdAt),
@@ -228,12 +228,12 @@ export default function PasswordsPage() {
                   )}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="bg-muted p-3 rounded-md font-mono text-sm break-all">
+              <CardContent className="space-y-6">
+                <div className="bg-muted p-4 rounded-md font-mono text-sm break-all">
                   {password.password}
                 </div>
-                <Separator className="my-4" />
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <Separator className="my-6" />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <Badge variant={password.uppercase ? 'default' : 'secondary'}>
                     Uppercase {password.uppercase ? '✓' : '✗'}
                   </Badge>
