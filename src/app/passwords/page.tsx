@@ -1,0 +1,197 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { format } from 'date-fns';
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/components/ui/use-toast';
+import { Icons } from '@/components/icons';
+import {
+  usePasswordStorage,
+  StoredPassword,
+} from '@/hooks/use-password-storage';
+
+export default function PasswordsPage() {
+  const { data: session, status } = useSession();
+  const { getPasswords, deletePassword } = usePasswordStorage();
+  const { toast } = useToast();
+  const [passwords, setPasswords] = useState<StoredPassword[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Only load passwords when session status is determined
+    if (status === 'authenticated' || status === 'unauthenticated') {
+      loadPasswords();
+    }
+  }, [status]);
+
+  const loadPasswords = async () => {
+    try {
+      setLoading(true);
+      const fetchedPasswords = await getPasswords();
+      setPasswords(fetchedPasswords);
+    } catch (error) {
+      toast({
+        title: 'Error loading passwords',
+        description: 'Could not load your passwords.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeletePassword = async (id: string) => {
+    try {
+      await deletePassword(id);
+      setPasswords(passwords.filter((p) => p.id !== id));
+      toast({
+        title: 'Password deleted',
+        description: 'Password was successfully removed.',
+        variant: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error deleting password',
+        description: 'Could not delete the password.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const copyToClipboard = async (password: string) => {
+    try {
+      await navigator.clipboard.writeText(password);
+      toast({
+        title: 'Copied!',
+        description: 'Password copied to clipboard.',
+        variant: 'success',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error copying',
+        description: 'Could not copy the password.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  // Show loading state while session is being determined
+  if (status === 'loading' || loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center">
+          <Icons.loader className="size-8 animate-spin" />
+          <span className="ml-2">
+            {status === 'loading'
+              ? 'Checking authentication...'
+              : 'Loading passwords...'}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Your Passwords</h1>
+        <p className="text-muted-foreground">
+          {session
+            ? 'Your passwords are securely saved in the database.'
+            : 'Your passwords are saved locally (maximum 50). Login to sync with the cloud.'}
+        </p>
+      </div>
+
+      {passwords.length === 0 ? (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <Icons.lock className="size-16 text-muted-foreground mb-4" />
+            <h3 className="text-xl font-semibold mb-2">No passwords found</h3>
+            <p className="text-muted-foreground text-center mb-4">
+              You haven't generated any passwords yet. Go to the password
+              generator to get started!
+            </p>
+            <Button asChild>
+              <a href="/generator">Generate Password</a>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="grid gap-4">
+          {passwords.map((password) => (
+            <Card key={password.id}>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <CardTitle className="text-lg">
+                      Generated Password
+                    </CardTitle>
+                    <Badge variant="secondary">
+                      {password.length} characters
+                    </Badge>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => copyToClipboard(password.password)}
+                    >
+                      <Icons.copy className="size-4 mr-2" />
+                      Copy
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDeletePassword(password.id)}
+                    >
+                      <Icons.trash className="size-4 mr-2" />
+                      Delete
+                    </Button>
+                  </div>
+                </div>
+                <CardDescription>
+                  Generated on{' '}
+                  {format(
+                    new Date(password.createdAt),
+                    "MMMM dd, yyyy 'at' HH:mm"
+                  )}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-muted p-3 rounded-md font-mono text-sm break-all">
+                  {password.password}
+                </div>
+                <Separator className="my-4" />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  <Badge variant={password.uppercase ? 'default' : 'secondary'}>
+                    Uppercase {password.uppercase ? '✓' : '✗'}
+                  </Badge>
+                  <Badge variant={password.lowercase ? 'default' : 'secondary'}>
+                    Lowercase {password.lowercase ? '✓' : '✗'}
+                  </Badge>
+                  <Badge variant={password.numbers ? 'default' : 'secondary'}>
+                    Numbers {password.numbers ? '✓' : '✗'}
+                  </Badge>
+                  <Badge variant={password.symbols ? 'default' : 'secondary'}>
+                    Symbols {password.symbols ? '✓' : '✗'}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

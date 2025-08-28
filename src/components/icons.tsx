@@ -3,11 +3,13 @@ import {
   BookLock,
   Copy,
   Loader,
+  Lock,
   LogOut,
   LucideProps,
   Moon,
   RefreshCcw,
   Sun,
+  Trash,
 } from 'lucide-react';
 
 export const Icons = {
@@ -17,6 +19,8 @@ export const Icons = {
   copy: Copy,
   bookLock: BookLock,
   loader: Loader,
+  lock: Lock,
+  trash: Trash,
   arrowLeft: ArrowLeft,
   refresh: RefreshCcw,
   githubAlternative: (props: LucideProps) => (

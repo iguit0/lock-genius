@@ -14,7 +14,7 @@ import {
 } from './ui/card';
 import { Input } from './ui/input';
 import { Separator } from './ui/separator';
-// import { Slider } from './ui/slider';
+import { Slider } from './ui/slider';
 import { Switch } from './ui/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { useToast } from './ui/use-toast';
@@ -29,10 +29,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useCopyToClipboard } from '@/hooks/use-copy-clipboard';
+import { usePasswordStorage } from '@/hooks/use-password-storage';
 import { generatePassword } from '@/services/password/password.service';
 
 const formSchema = z.object({
-  length: z.number().min(4).max(2048),
+  length: z.number().min(4).max(255),
   uppercase: z.boolean(),
   lowercase: z.boolean(),
   numbers: z.boolean(),
@@ -43,6 +44,7 @@ export default function PasswordGenerator() {
   const [generatedPassword, setGeneratedPassword] = useState('');
   const { toast } = useToast();
   const [copy] = useCopyToClipboard();
+  const { savePassword } = usePasswordStorage();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,14 +68,25 @@ export default function PasswordGenerator() {
           uppercase: values.uppercase,
         },
       });
+
       setGeneratedPassword(password);
+
+      // Save generated password
+      await savePassword({
+        password,
+        length: values.length,
+        uppercase: values.uppercase,
+        lowercase: values.lowercase,
+        numbers: values.numbers,
+        symbols: values.symbols,
+      });
+
       toast({
         title: '✨ Password generated',
-        description: 'Your new password has been generated!',
+        description: 'Your new password has been generated and saved!',
         variant: 'success',
       });
     } catch (err) {
-      // TODO: improve types if request throw an error
       const error = err as AxiosError<{ detail: string }>;
       console.log(err);
       toast({
@@ -254,14 +267,32 @@ export default function PasswordGenerator() {
               />
             </div>
 
-            {/*
-        // TODO: implement
-        <div className="mt-8 space-y-4">
-          <Label className="inline" htmlFor="length">
-            Length
-          </Label>
-          <Slider defaultValue={[10]} id="length" max={20} min={6} />
-        </div> */}
+            <FormField
+              control={form.control}
+              name="length"
+              render={({ field }) => (
+                <FormItem className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Password Length</FormLabel>
+                    <span className="w-12 px-2 py-0.5 text-right text-sm text-muted-foreground select-none">
+                      {field.value}
+                    </span>
+                  </div>
+                  <FormControl>
+                    <Slider
+                      min={4}
+                      max={255}
+                      step={1}
+                      defaultValue={[field.value]}
+                      onValueChange={([value]) => field.onChange(value)}
+                      className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
+                      aria-label="Password length"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </form>
       </Form>

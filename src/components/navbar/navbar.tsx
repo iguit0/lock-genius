@@ -20,6 +20,28 @@ export const Navbar = () => {
           <Icons.bookLock className="size-6" />
           {siteConfig.title}
         </Link>
+
+        <nav className="flex items-center space-x-6">
+          <Link
+            href="/"
+            className="text-sm font-medium transition-colors hover:text-primary"
+          >
+            Home
+          </Link>
+          <Link
+            href="/generator"
+            className="text-sm font-medium transition-colors hover:text-primary"
+          >
+            Generator
+          </Link>
+          <Link
+            href="/passwords"
+            className="text-sm font-medium transition-colors hover:text-primary"
+          >
+            My Passwords
+          </Link>
+        </nav>
+
         <div className="flex items-center gap-4">
           <ThemeToggle />
           {session ? (
