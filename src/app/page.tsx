@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <GridBeams className="min-h-screen">
-      <section className="container mt-8 flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 px-4 text-center sm:mt-12 sm:gap-6 md:mt-16 md:gap-8">
+      <section className="container mt-4 flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-4 px-4 text-center sm:mt-8 sm:gap-6 md:mt-12 md:gap-8 lg:mt-16">
         <div className="animate-fade-in-up space-y-4 sm:space-y-6 md:space-y-8">
           <h1 className="text-foreground font-mono text-2xl font-extrabold leading-tight tracking-tighter transition-all duration-300 sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
             👋 Say goodbye to weak passwords

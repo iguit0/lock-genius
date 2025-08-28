@@ -6,6 +6,7 @@ import {
   Lock,
   LogOut,
   LucideProps,
+  Menu,
   Moon,
   RefreshCcw,
   Sun,
@@ -23,6 +24,7 @@ export const Icons = {
   trash: Trash,
   arrowLeft: ArrowLeft,
   refresh: RefreshCcw,
+  menu: Menu,
   githubAlternative: (props: LucideProps) => (
     <svg
       {...props}

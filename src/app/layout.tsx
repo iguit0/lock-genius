@@ -44,13 +44,19 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: PropsWithChildren) => {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
+      </head>
       <body className={cn('h-screen font-sans', fonts)}>
         <ThemeProvider attribute="class">
           <Provider>
             <TooltipProvider>
               <div className="flex h-full flex-col">
                 <Navbar />
-                <main className="">{children}</main>
+                <main className="flex-1 overflow-x-hidden">{children}</main>
               </div>
               <Toaster />
             </TooltipProvider>

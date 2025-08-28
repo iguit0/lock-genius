@@ -138,14 +138,8 @@ export default function PasswordGenerator() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <CardContent className="mt-2 space-y-8 p-8">
-              <div className="flex w-full items-center space-x-2">
-                <div
-                  className={`relative ${
-                    generatedPassword
-                      ? 'flex-1'
-                      : 'flex-1 max-w-[calc(100%-120px)]'
-                  }`}
-                >
+              <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
+                <div className="relative flex-1">
                   <Input
                     id="password"
                     type="text"
@@ -176,17 +170,18 @@ export default function PasswordGenerator() {
                     />
                   )}
                 </div>
+
                 {!generatedPassword ? (
                   <Button
                     id="generate"
                     variant="default"
                     type="submit"
-                    className="min-w-[120px]"
+                    className="w-full sm:w-auto sm:min-w-[120px]"
                   >
                     Generate
                   </Button>
                 ) : (
-                  <>
+                  <div className="flex w-full justify-center space-x-2 sm:w-auto">
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
@@ -215,7 +210,7 @@ export default function PasswordGenerator() {
                         </Button>
                       </TooltipTrigger>
                     </Tooltip>
-                  </>
+                  </div>
                 )}
               </div>
 

@@ -7,11 +7,11 @@ import PasswordGenerator from '@/components/password-generator';
 
 export default function Generator() {
   return (
-    <section className="container mt-10 flex flex-col items-center gap-3 text-center md:absolute md:left-1/2 md:top-1/2 md:mt-0 md:-translate-x-1/2 md:-translate-y-1/2">
+    <section className="container mt-4 flex flex-col items-center gap-3 px-4 text-center sm:mt-8 md:mt-10 lg:mt-12">
       <PasswordGenerator />
 
       <Link
-        className="mt-2 flex items-center gap-2 text-sm underline underline-offset-4"
+        className="mt-4 flex items-center gap-2 text-sm underline underline-offset-4 transition-colors hover:text-primary sm:mt-6"
         href="/"
       >
         <Icons.arrowLeft className="size-5" />
