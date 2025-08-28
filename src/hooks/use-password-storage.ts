@@ -12,6 +12,28 @@ export interface StoredPassword {
   createdAt: Date;
 }
 
+interface LocalStoredPassword {
+  id: string;
+  password: string;
+  length: number;
+  uppercase: boolean;
+  lowercase: boolean;
+  numbers: boolean;
+  symbols: boolean;
+  createdAt: string; // ISO string from localStorage
+}
+
+interface ApiStoredPassword {
+  id: string;
+  password: string;
+  length: number;
+  uppercase: boolean;
+  lowercase: boolean;
+  numbers: boolean;
+  symbols: boolean;
+  createdAt: string; // ISO string from API
+}
+
 const LOCAL_STORAGE_KEY = 'lock-genius-passwords';
 const MAX_LOCAL_PASSWORDS = 50;
 
@@ -26,9 +48,9 @@ export const usePasswordStorage = () => {
       try {
         const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (stored) {
-          const passwords = JSON.parse(stored);
+          const passwords: LocalStoredPassword[] = JSON.parse(stored);
           setLocalPasswords(
-            passwords.map((p: any) => ({
+            passwords.map((p: LocalStoredPassword) => ({
               ...p,
               createdAt: new Date(p.createdAt),
             }))
@@ -87,8 +109,8 @@ export const usePasswordStorage = () => {
       try {
         const response = await fetch('/api/v1/passwords');
         if (!response.ok) throw new Error('Error fetching passwords');
-        const passwords = await response.json();
-        return passwords.map((p: any) => ({
+        const passwords: ApiStoredPassword[] = await response.json();
+        return passwords.map((p: ApiStoredPassword) => ({
           ...p,
           createdAt: new Date(p.createdAt),
         }));

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { useSession } from 'next-auth/react';
 
@@ -32,6 +32,17 @@ import {
   usePasswordStorage,
 } from '@/hooks/use-password-storage';
 
+interface LocalStoredPassword {
+  id: string;
+  password: string;
+  length: number;
+  uppercase: boolean;
+  lowercase: boolean;
+  numbers: boolean;
+  symbols: boolean;
+  createdAt: string; // ISO string from localStorage
+}
+
 export default function PasswordsPage() {
   const { data: session, status } = useSession();
   const { getPasswords, deletePassword } = usePasswordStorage();
@@ -39,14 +50,7 @@ export default function PasswordsPage() {
   const [passwords, setPasswords] = useState<StoredPassword[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Only load passwords when session status is determined
-    if (status === 'authenticated' || status === 'unauthenticated') {
-      loadPasswords();
-    }
-  }, [status]);
-
-  const loadPasswords = async () => {
+  const loadPasswords = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -59,7 +63,7 @@ export default function PasswordsPage() {
         const stored = localStorage.getItem('lock-genius-passwords');
         if (stored) {
           const passwords = JSON.parse(stored);
-          const parsedPasswords = passwords.map((p: any) => ({
+          const parsedPasswords = passwords.map((p: LocalStoredPassword) => ({
             ...p,
             createdAt: new Date(p.createdAt),
           }));
@@ -77,7 +81,14 @@ export default function PasswordsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session, getPasswords, toast]);
+
+  useEffect(() => {
+    // Only load passwords when session status is determined
+    if (status === 'authenticated' || status === 'unauthenticated') {
+      loadPasswords();
+    }
+  }, [status, loadPasswords]);
 
   const handleDeletePassword = async (id: string) => {
     try {
@@ -147,7 +158,7 @@ export default function PasswordsPage() {
             <Icons.lock className="size-16 text-muted-foreground mb-4" />
             <h3 className="text-xl font-semibold mb-2">No passwords found</h3>
             <p className="text-muted-foreground text-center mb-4">
-              You haven't generated any passwords yet. Go to the password
+              You haven&apos;t generated any passwords yet. Go to the password
               generator to get started!
             </p>
             <Button asChild>
