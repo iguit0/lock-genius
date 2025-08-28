@@ -5,6 +5,7 @@ import { AxiosError } from 'axios';
 import { z } from 'zod';
 
 import { Icons } from './icons';
+import { ShineBorder } from './magicui/shine-border';
 import {
   Card,
   CardContent,
@@ -116,186 +117,193 @@ export default function PasswordGenerator() {
   };
 
   return (
-    <Card className="w-full max-w-2xl">
-      <CardHeader className="mb-3 space-y-2">
-        <CardTitle className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Password Generator
-        </CardTitle>
-        <CardDescription>
-          Generate a secure password based on selected options.
-        </CardDescription>
-      </CardHeader>
+    <div className="relative w-full max-w-2xl">
+      <Card className="relative w-full max-w-2xl">
+        <ShineBorder
+          borderWidth={1}
+          duration={16}
+          shineColor={['#3b82f6', '#8b5cf6', '#06b6d4']}
+        />
+        <CardHeader className="mb-3 space-y-2">
+          <CardTitle className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
+            Password Generator
+          </CardTitle>
+          <CardDescription>
+            Generate a secure password based on selected options.
+          </CardDescription>
+        </CardHeader>
 
-      <Separator className="my-1" />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <CardContent className="mt-2 space-y-8 p-4">
-            <div className="flex w-full items-center space-x-2">
-              <Input
-                id="password"
-                type="text"
-                placeholder="🔑  Your new password will appear here..."
-                readOnly
-                value={generatedPassword}
-                className="hover:cursor-pointer focus-visible:outline-hidden focus-visible:ring-0"
-                onClick={(e) => {
-                  if (!generatedPassword) {
-                    return;
-                  }
-                  e.stopPropagation();
-                  handleCopyToClipboard();
-                }}
-              />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="icon"
-                    id="generate"
-                    variant="ghost"
-                    type="submit"
-                  >
-                    <TooltipContent>Generate</TooltipContent>
-                    <Icons.refresh className="size-5" />
-                  </Button>
-                </TooltipTrigger>
-              </Tooltip>
-              {generatedPassword && (
+        <Separator className="my-1" />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <CardContent className="mt-2 space-y-8 p-4">
+              <div className="flex w-full items-center space-x-2">
+                <Input
+                  id="password"
+                  type="text"
+                  placeholder="🔑  Your new password will appear here..."
+                  readOnly
+                  value={generatedPassword}
+                  className="hover:cursor-pointer focus-visible:outline-hidden focus-visible:ring-0"
+                  onClick={(e) => {
+                    if (!generatedPassword) {
+                      return;
+                    }
+                    e.stopPropagation();
+                    handleCopyToClipboard();
+                  }}
+                />
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
                       size="icon"
-                      id="copy"
+                      id="generate"
                       variant="ghost"
-                      onClick={handleCopyToClipboard}
-                      disabled={!generatedPassword}
-                      type="button"
+                      type="submit"
                     >
-                      <TooltipContent>Copy</TooltipContent>
-                      <Icons.copy className="size-5" />
+                      <TooltipContent>Generate</TooltipContent>
+                      <Icons.refresh className="size-5" />
                     </Button>
                   </TooltipTrigger>
                 </Tooltip>
-              )}
-            </div>
+                {generatedPassword && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="icon"
+                        id="copy"
+                        variant="ghost"
+                        onClick={handleCopyToClipboard}
+                        disabled={!generatedPassword}
+                        type="button"
+                      >
+                        <TooltipContent>Copy</TooltipContent>
+                        <Icons.copy className="size-5" />
+                      </Button>
+                    </TooltipTrigger>
+                  </Tooltip>
+                )}
+              </div>
 
-            <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="uppercase"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <FormLabel>Uppercase</FormLabel>
+                        </TooltipTrigger>
+                        <TooltipContent>(A-Z)</TooltipContent>
+                      </Tooltip>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="numbers"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <FormLabel>Numbers</FormLabel>
+                        </TooltipTrigger>
+                        <TooltipContent>(0-9)</TooltipContent>
+                      </Tooltip>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="lowercase"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <FormLabel>Lowercase</FormLabel>
+                        </TooltipTrigger>
+                        <TooltipContent>(a-z)</TooltipContent>
+                      </Tooltip>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="symbols"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <FormLabel>Symbols</FormLabel>
+                        </TooltipTrigger>
+                        <TooltipContent>!@#$%^&*</TooltipContent>
+                      </Tooltip>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
-                name="uppercase"
+                name="length"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <FormLabel>Uppercase</FormLabel>
-                      </TooltipTrigger>
-                      <TooltipContent>(A-Z)</TooltipContent>
-                    </Tooltip>
+                  <FormItem className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password Length</FormLabel>
+                      <span className="w-12 px-2 py-0.5 text-right text-sm text-muted-foreground select-none">
+                        {field.value}
+                      </span>
+                    </div>
                     <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
+                      <Slider
+                        min={4}
+                        max={255}
+                        step={1}
+                        defaultValue={[field.value]}
+                        onValueChange={([value]) => field.onChange(value)}
+                        className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
+                        aria-label="Password length"
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="numbers"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <FormLabel>Numbers</FormLabel>
-                      </TooltipTrigger>
-                      <TooltipContent>(0-9)</TooltipContent>
-                    </Tooltip>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="lowercase"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <FormLabel>Lowercase</FormLabel>
-                      </TooltipTrigger>
-                      <TooltipContent>(a-z)</TooltipContent>
-                    </Tooltip>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="symbols"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <FormLabel>Symbols</FormLabel>
-                      </TooltipTrigger>
-                      <TooltipContent>!@#$%^&*</TooltipContent>
-                    </Tooltip>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="length"
-              render={({ field }) => (
-                <FormItem className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <FormLabel>Password Length</FormLabel>
-                    <span className="w-12 px-2 py-0.5 text-right text-sm text-muted-foreground select-none">
-                      {field.value}
-                    </span>
-                  </div>
-                  <FormControl>
-                    <Slider
-                      min={4}
-                      max={255}
-                      step={1}
-                      defaultValue={[field.value]}
-                      onValueChange={([value]) => field.onChange(value)}
-                      className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
-                      aria-label="Password length"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </form>
-      </Form>
-    </Card>
+            </CardContent>
+          </form>
+        </Form>
+      </Card>
+    </div>
   );
 }
