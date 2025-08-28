@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 
@@ -14,6 +15,7 @@ import { siteConfig } from '@/lib/constant';
 
 export const Navbar = () => {
   const { data: session } = useSession();
+  const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
@@ -36,21 +38,36 @@ export const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-6">
           <Link
             href="/"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className={`text-sm font-medium transition-colors hover:text-primary relative ${
+              pathname === '/' ? 'text-primary' : ''
+            }`}
           >
             Home
+            {pathname === '/' && (
+              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
+            )}
           </Link>
           <Link
             href="/generator"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className={`text-sm font-medium transition-colors hover:text-primary relative ${
+              pathname === '/generator' ? 'text-primary' : ''
+            }`}
           >
             Generator
+            {pathname === '/generator' && (
+              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
+            )}
           </Link>
           <Link
             href="/passwords"
-            className="text-sm font-medium transition-colors hover:text-primary"
+            className={`text-sm font-medium transition-colors hover:text-primary relative ${
+              pathname === '/passwords' ? 'text-primary' : ''
+            }`}
           >
             My Passwords
+            {pathname === '/passwords' && (
+              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
+            )}
           </Link>
         </nav>
 
@@ -77,28 +94,43 @@ export const Navbar = () => {
 
       {/* Mobile Navigation Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+        <div className="md:hidden absolute top-16 left-0 right-0 bg-background border-b shadow-lg">
           <nav className="container px-4 py-4 space-y-4">
             <Link
               href="/"
-              className="block text-sm font-medium transition-colors hover:text-primary py-2"
+              className={`block text-sm font-medium transition-colors hover:text-primary py-2 relative ${
+                pathname === '/' ? 'text-primary' : ''
+              }`}
               onClick={closeMobileMenu}
             >
               Home
+              {pathname === '/' && (
+                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
+              )}
             </Link>
             <Link
               href="/generator"
-              className="block text-sm font-medium transition-colors hover:text-primary py-2"
+              className={`block text-sm font-medium transition-colors hover:text-primary py-2 relative ${
+                pathname === '/generator' ? 'text-primary' : ''
+              }`}
               onClick={closeMobileMenu}
             >
               Generator
+              {pathname === '/generator' && (
+                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
+              )}
             </Link>
             <Link
               href="/passwords"
-              className="block text-sm font-medium transition-colors hover:text-primary py-2"
+              className={`block text-sm font-medium transition-colors hover:text-primary py-2 relative ${
+                pathname === '/passwords' ? 'text-primary' : ''
+              }`}
               onClick={closeMobileMenu}
             >
               My Passwords
+              {pathname === '/passwords' && (
+                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1.5 h-1.5 bg-primary rounded-full" />
+              )}
             </Link>
           </nav>
         </div>
