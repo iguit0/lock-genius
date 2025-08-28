@@ -2,15 +2,11 @@
 
 import Link from 'next/link';
 
-import { SignInButton } from '@/components/navbar/sign-in-button';
-
 export const HomeActions = () => {
   return (
-    <div className="mx-auto mt-6 w-full max-w-sm space-y-5">
-      <SignInButton fullWidth size="lg" alternativeIcon />
-
+    <div className="mx-auto w-full max-w-sm space-y-4 px-4 sm:px-6 md:px-8">
       <Link
-        className="inline-block text-sm underline underline-offset-[4px]"
+        className="hover:text-foreground inline-block text-sm font-medium underline underline-offset-4 transition-all duration-200 hover:underline-offset-[6px] sm:text-base md:text-lg"
         href="/generator"
       >
         Continue without an account

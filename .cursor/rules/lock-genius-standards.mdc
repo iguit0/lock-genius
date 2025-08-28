@@ -1,0 +1,294 @@
+---
+description: Lock Genius coding standards and architecture patterns
+globs: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx']
+alwaysApply: true
+---
+
+# Lock Genius - Coding Standards & Architecture
+
+## Project Context
+
+Lock Genius is a modern password manager built with Next.js 14 App Router, TypeScript, and a comprehensive toolchain focused on type safety and developer experience.
+
+## Tech Stack Requirements
+
+### Core Framework
+
+- Use **Next.js 14** with App Router (not Pages Router)
+- Write all code in **TypeScript** with strict mode
+- Use **React 18** with Server/Client component patterns
+- Default to Server Components, only use Client Components when necessary
+
+### UI & Styling Standards
+
+- Use **Tailwind CSS** utility classes for styling
+- Implement **shadcn/ui** component patterns with **Radix UI** primitives
+- Use **class-variance-authority (CVA)** for component variants
+- Use **Lucide React** for icons
+- Support dark mode with **next-themes**
+
+### Form Handling Requirements
+
+- Use **React Hook Form** for all form state management
+- Use **Zod** for schema validation and TypeScript inference
+- Always integrate with **@hookform/resolvers/zod**
+- Implement proper error handling and accessibility
+
+## Architecture Patterns
+
+### File Organization
+
+```
+src/
+├── app/                 # Next.js App Router
+│   ├── api/            # API routes
+│   ├── (routes)/       # App pages
+│   └── layout.tsx      # Root layout
+├── components/         # React components
+│   ├── ui/             # Base UI components (shadcn/ui)
+│   └── [feature]/      # Feature-specific components
+├── hooks/              # Custom React hooks
+├── lib/                # Utility libraries
+├── services/           # API service layer
+└── types/              # TypeScript type definitions
+```
+
+### Naming Conventions
+
+- **Files**: kebab-case for components, camelCase for utilities
+- **Components**: PascalCase with descriptive names
+- **Functions**: camelCase
+- **Constants**: SCREAMING_SNAKE_CASE
+- **Types/Interfaces**: PascalCase with descriptive suffixes
+
+## Component Standards
+
+### React Component Pattern
+
+Always use this pattern for reusable components:
+
+```typescript
+import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
+
+const componentVariants = cva(
+  'base-classes',
+  {
+    variants: {
+      variant: {
+        default: 'default-classes',
+        secondary: 'secondary-classes',
+      },
+      size: {
+        default: 'default-size',
+        sm: 'small-size',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
+);
+
+export interface ComponentProps
+  extends React.HTMLAttributes<HTMLElement>,
+    VariantProps<typeof componentVariants> {
+  asChild?: boolean;
+}
+
+const Component = React.forwardRef<HTMLElement, ComponentProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'div';
+    return (
+      <Comp
+        className={cn(componentVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    );
+  }
+);
+Component.displayName = 'Component';
+
+export { Component, componentVariants };
+```
+
+### Form Component Pattern
+
+Always use this pattern for forms:
+
+```typescript
+const formSchema = z.object({
+  field: z.string().min(1, 'Field is required'),
+});
+
+function MyForm() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      field: '',
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      // Handle submission
+    } catch (error) {
+      form.setError('root', { message: 'Error message' });
+    }
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="field"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Label</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
+
+## API & Service Patterns
+
+### API Route Pattern
+
+```typescript
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const validatedData = schema.parse(body);
+
+    const result = await serviceFunction(validatedData);
+    return Response.json(result);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return Response.json({ error: error.issues }, { status: 400 });
+    }
+    return Response.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+```
+
+### Service Layer Pattern
+
+```typescript
+export const apiFunction = async ({
+  params,
+}: RequestParams): Promise<ResponseType> => {
+  return await api.post('/endpoint', params).then((res) => res.data);
+};
+```
+
+## Import Standards
+
+### Import Order
+
+1. React and Next.js imports
+2. Third-party libraries
+3. Internal components and utilities (using @/ aliases)
+4. Type-only imports
+
+```typescript
+import React from 'react';
+import { NextPage } from 'next';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+import type { User } from '@/types/user';
+```
+
+## Styling Guidelines
+
+### Tailwind Usage
+
+- Use utility classes for styling
+- Use the `cn` utility for conditional classes
+- Follow mobile-first responsive design
+- Use CSS variables for theming
+
+```typescript
+const className = cn('base-classes', {
+  'conditional-class': condition,
+  'error-class': hasError,
+});
+```
+
+## Environment & Configuration
+
+### Environment Variables
+
+- Use T3 env for validation
+- Define schemas with Zod
+- Keep sensitive data server-side only
+
+```typescript
+export const env = createEnv({
+  server: {
+    DATABASE_URL: z.string().url(),
+  },
+  client: {
+    NEXT_PUBLIC_APP_URL: z.string().url(),
+  },
+  runtimeEnv: {
+    DATABASE_URL: process.env.DATABASE_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  },
+});
+```
+
+## Code Quality Requirements
+
+### TypeScript
+
+- Use strict TypeScript configuration
+- Prefer type inference over explicit typing
+- Use Zod for runtime type validation
+- Define proper interfaces for all props and API responses
+
+### Performance
+
+- Use Server Components by default
+- Implement proper caching strategies
+- Use dynamic imports for code splitting
+- Avoid unnecessary client-side JavaScript
+
+### Accessibility
+
+- Use semantic HTML elements
+- Implement proper ARIA attributes
+- Ensure keyboard navigation
+- Use Radix UI primitives for accessibility
+
+### Security
+
+- Validate all user inputs with Zod
+- Use proper authentication patterns
+- Implement CSRF protection
+- Keep sensitive data secure
+
+## Testing Standards
+
+- Use Jest with Testing Library
+- Test user interactions and accessibility
+- Mock external dependencies
+- Use descriptive test names
+
+Follow these standards consistently throughout the codebase to maintain code quality and developer experience.

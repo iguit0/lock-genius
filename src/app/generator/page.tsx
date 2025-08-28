@@ -11,7 +11,7 @@ export default function Generator() {
       <PasswordGenerator />
 
       <Link
-        className="mt-2 flex items-center gap-2 text-sm underline underline-offset-[4px]"
+        className="mt-2 flex items-center gap-2 text-sm underline underline-offset-4"
         href="/"
       >
         <Icons.arrowLeft className="size-5" />

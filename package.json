@@ -22,7 +22,13 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage --watchAll",
-    "postbuild": "next-sitemap --config next-sitemap.config.js"
+    "postbuild": "next-sitemap --config next-sitemap.config.js",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "db:setup": "prisma generate && prisma db push",
+    "db:reset": "prisma db push --force-reset",
+    "db:studio": "prisma studio"
   },
   "lint-staged": {
     "*.{jsx,js,ts,tsx}": [
