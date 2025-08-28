@@ -136,7 +136,7 @@ export default function PasswordGenerator() {
         <Separator className="my-1" />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <CardContent className="mt-2 space-y-8 p-4">
+            <CardContent className="mt-2 space-y-8 p-8">
               <div className="flex w-full items-center space-x-2">
                 <Input
                   id="password"
