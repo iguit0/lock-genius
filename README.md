@@ -26,12 +26,9 @@ A secure and modern password manager built with Next.js.
   - Customizable password options (length, character sets)
   - Copy to clipboard functionality
 - [x] Health Check API
-- [x] PostgreSQL Database Integration
-- [x] Modern UI with Dark/Light Mode
+- [x] Database Integration
 - [ ] Password Vault Management
 - [x] Unit Testing
-- [x] Type Safety with TypeScript
-- [x] API Documentation
 
 ## 🛠 Tech Stack
 
@@ -87,17 +84,10 @@ A secure and modern password manager built with Next.js.
    cp .env.example .env.local
    ```
 
-   Fill in the required environment variables:
-
-   - `NEXT_PUBLIC_SITE_URL`: Your site URL
-   - `NEXT_PUBLIC_GITHUB_ID`: GitHub OAuth App ID
-   - `NEXT_PUBLIC_GITHUB_SECRET`: GitHub OAuth App Secret
-   - `POSTGRES_PRISMA_URL`: PostgreSQL connection URL
-
-4. Run database migrations:
+4. Set up the database:
 
    ```bash
-   pnpm prisma migrate dev
+   pnpm db:setup
    ```
 
 5. Start the development server:
@@ -106,6 +96,32 @@ A secure and modern password manager built with Next.js.
    ```
 
 Visit `http://localhost:3000` to see the application running.
+
+### Additional Commands
+
+- **Database Management**:
+
+  - `pnpm db:reset` - Reset database (⚠️ **Warning**: This will delete all data)
+  - `pnpm db:studio` - Open Prisma Studio for database management
+
+- **Testing**:
+
+  - `pnpm test` - Run tests
+  - `pnpm test:watch` - Run tests in watch mode
+  - `pnpm test:coverage` - Run tests with coverage report
+
+- **Code Quality**:
+
+  - `pnpm lint` - Run ESLint
+  - `pnpm lint:fix` - Fix ESLint issues automatically
+  - `pnpm format:check` - Check code formatting
+  - `pnpm format:write` - Format code automatically
+  - `pnpm typecheck` - Run TypeScript type checking
+
+- **Docker** (if using Docker):
+  - `pnpm docker:up` - Start Docker services
+  - `pnpm docker:down` - Stop Docker services
+  - `pnpm docker:logs` - View Docker logs
 
 ## 🚨 License
 
