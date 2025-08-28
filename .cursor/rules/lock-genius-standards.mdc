@@ -1,14 +1,8 @@
----
-description: Lock Genius coding standards and architecture patterns
-globs: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx']
-alwaysApply: true
----
-
 # Lock Genius - Coding Standards & Architecture
 
 ## Project Context
 
-Lock Genius is a modern password manager built with Next.js 14 App Router, TypeScript, and a comprehensive toolchain focused on type safety and developer experience.
+Lock Genius is a modern password manager built with Next.js 14 App Router, TypeScript, and a comprehensive toolchain focused on type safety, security, and developer experience.
 
 ## Tech Stack Requirements
 
@@ -18,14 +12,30 @@ Lock Genius is a modern password manager built with Next.js 14 App Router, TypeS
 - Write all code in **TypeScript** with strict mode
 - Use **React 18** with Server/Client component patterns
 - Default to Server Components, only use Client Components when necessary
+- Use **pnpm** as package manager (as specified in README)
+
+### Database & ORM
+
+- Use **PostgreSQL** as the primary database
+- Use **Prisma** as the ORM with proper migrations
+- Follow NextAuth.js schema patterns for authentication
+- Use `prisma generate` and `prisma db push` for database operations
+
+### Authentication
+
+- Use **NextAuth.js** for authentication
+- Support GitHub OAuth provider
+- Follow the established Account/Session/User/VerificationToken schema
+- Use proper session management with `useSession` hook
 
 ### UI & Styling Standards
 
-- Use **Tailwind CSS** utility classes for styling
+- Use **Tailwind CSS v4** utility classes for styling
 - Implement **shadcn/ui** component patterns with **Radix UI** primitives
 - Use **class-variance-authority (CVA)** for component variants
 - Use **Lucide React** for icons
 - Support dark mode with **next-themes**
+- Use **tailwind-merge** for class merging via `cn` utility
 
 ### Form Handling Requirements
 
@@ -33,6 +43,14 @@ Lock Genius is a modern password manager built with Next.js 14 App Router, TypeS
 - Use **Zod** for schema validation and TypeScript inference
 - Always integrate with **@hookform/resolvers/zod**
 - Implement proper error handling and accessibility
+- Use `'use client'` directive for form components
+
+### Environment & Configuration
+
+- Use **T3 Env** (`@t3-oss/env-nextjs`) for environment validation
+- Define schemas with Zod for type safety
+- Keep sensitive data server-side only
+- Use proper environment variable naming conventions
 
 ## Architecture Patterns
 
@@ -41,16 +59,24 @@ Lock Genius is a modern password manager built with Next.js 14 App Router, TypeS
 ```
 src/
 ├── app/                 # Next.js App Router
-│   ├── api/            # API routes
+│   ├── api/            # API routes (v1 structure)
+│   │   └── v1/         # Versioned API endpoints
 │   ├── (routes)/       # App pages
 │   └── layout.tsx      # Root layout
+├── common/             # Shared utilities and constants
+│   ├── api.ts          # Axios instance configuration
+│   └── constants/      # Environment constants
 ├── components/         # React components
 │   ├── ui/             # Base UI components (shadcn/ui)
+│   ├── magicui/        # Magic UI components
 │   └── [feature]/      # Feature-specific components
 ├── hooks/              # Custom React hooks
 ├── lib/                # Utility libraries
-├── services/           # API service layer
-└── types/              # TypeScript type definitions
+├── services/           # API service layer with types
+├── styles/             # Global styles
+├── types/              # TypeScript type definitions
+└── __tests__/          # Test files
+    └── unit/           # Unit tests
 ```
 
 ### Naming Conventions
@@ -60,6 +86,7 @@ src/
 - **Functions**: camelCase
 - **Constants**: SCREAMING_SNAKE_CASE
 - **Types/Interfaces**: PascalCase with descriptive suffixes
+- **API Routes**: Use versioned structure (`/api/v1/`)
 
 ## Component Standards
 
@@ -71,6 +98,7 @@ Always use this pattern for reusable components:
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
+
 import { cn } from '@/lib/utils';
 
 const componentVariants = cva(
@@ -121,19 +149,32 @@ export { Component, componentVariants };
 Always use this pattern for forms:
 
 ```typescript
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
+
 const formSchema = z.object({
   field: z.string().min(1, 'Field is required'),
 });
 
+type FormSchema = z.infer<typeof formSchema>;
+
 function MyForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       field: '',
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormSchema) => {
     try {
       // Handle submission
     } catch (error) {
@@ -149,11 +190,14 @@ function MyForm() {
           name="field"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Label</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input
+                  className={cn(
+                    form.formState.errors.field && 'border-destructive'
+                  )}
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -168,18 +212,33 @@ function MyForm() {
 ### API Route Pattern
 
 ```typescript
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const validatedData = schema.parse(body);
+import { NextRequest, NextResponse } from 'next/server';
 
-    const result = await serviceFunction(validatedData);
-    return Response.json(result);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return Response.json({ error: error.issues }, { status: 400 });
+interface RequestBody {
+  // Define request interface
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body: RequestBody = await request.json();
+
+    // Validate input
+    if (!body.requiredField) {
+      return NextResponse.json(
+        { detail: 'Required field is missing' },
+        { status: 400 }
+      );
     }
-    return Response.json({ error: 'Internal server error' }, { status: 500 });
+
+    // Process request
+    const result = await processRequest(body);
+
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 ```
@@ -187,11 +246,54 @@ export async function POST(request: Request) {
 ### Service Layer Pattern
 
 ```typescript
-export const apiFunction = async ({
+// password.types.ts
+export interface GeneratePasswordRequestParams {
+  params: {
+    length: number;
+    uppercase: boolean;
+    lowercase: boolean;
+    numbers: boolean;
+    symbols: boolean;
+  };
+}
+
+export interface GeneratePasswordResponse {
+  password: string;
+}
+
+// password.service.ts
+import {
+  GeneratePasswordRequestParams,
+  GeneratePasswordResponse,
+} from './password.types';
+
+import api from '@/common/api';
+
+export const generatePassword = async ({
   params,
-}: RequestParams): Promise<ResponseType> => {
-  return await api.post('/endpoint', params).then((res) => res.data);
+}: GeneratePasswordRequestParams): Promise<GeneratePasswordResponse> => {
+  return await api.post('/passwords/generate', params).then((res) => res.data);
 };
+```
+
+### API Configuration
+
+```typescript
+// common/api.ts
+import axios, { AxiosInstance } from 'axios';
+
+import { API_BASE_URL } from '@/common/constants/env';
+
+const API_URL = API_BASE_URL || '/api/v1';
+
+const api: AxiosInstance = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+export default api;
 ```
 
 ## Import Standards
@@ -205,7 +307,7 @@ export const apiFunction = async ({
 
 ```typescript
 import React from 'react';
-import { NextPage } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -240,16 +342,22 @@ const className = cn('base-classes', {
 - Keep sensitive data server-side only
 
 ```typescript
+// env.mjs
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
+
 export const env = createEnv({
   server: {
     DATABASE_URL: z.string().url(),
+    NEXTAUTH_SECRET: z.string().min(1),
   },
   client: {
-    NEXT_PUBLIC_APP_URL: z.string().url(),
+    NEXT_PUBLIC_SITE_URL: z.string().url(),
   },
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   },
 });
 ```
@@ -280,15 +388,92 @@ export const env = createEnv({
 ### Security
 
 - Validate all user inputs with Zod
-- Use proper authentication patterns
+- Use proper authentication patterns with NextAuth.js
 - Implement CSRF protection
+- Use cryptographically secure random generation for passwords
 - Keep sensitive data secure
 
 ## Testing Standards
 
+### Jest Configuration
+
 - Use Jest with Testing Library
 - Test user interactions and accessibility
-- Mock external dependencies
+- Mock external dependencies (NextAuth, API calls)
 - Use descriptive test names
+- Follow the established test structure in `src/__tests__/unit/`
 
-Follow these standards consistently throughout the codebase to maintain code quality and developer experience.
+```typescript
+// Example test pattern
+import { render } from '@testing-library/react';
+import { useSession } from 'next-auth/react';
+
+import Component from '@/components/component';
+
+const mockUseSession = useSession as jest.Mock;
+
+jest.mock('next-auth/react');
+
+describe('Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should render correctly', () => {
+    mockUseSession.mockReturnValue({
+      status: 'authenticated',
+      data: { user: { name: 'Test User' } },
+    });
+
+    const { getByText } = render(<Component />);
+    expect(getByText('Test User')).toBeInTheDocument();
+  });
+});
+```
+
+## Development Workflow
+
+### Scripts
+
+- `pnpm dev`: Start development server with Prisma generation
+- `pnpm build`: Build with Prisma generation and database push
+- `pnpm test`: Run Jest tests
+- `pnpm test:coverage`: Run tests with coverage
+- `pnpm lint`: Run ESLint
+- `pnpm format:write`: Format code with Prettier
+- `pnpm typecheck`: TypeScript type checking
+
+### Database Management
+
+- `pnpm db:setup`: Setup database with Prisma
+- `pnpm db:reset`: Reset database
+- `pnpm db:studio`: Open Prisma Studio
+
+### Docker Support
+
+- `pnpm docker:up`: Start Docker services
+- `pnpm docker:down`: Stop Docker services
+- `pnpm docker:logs`: View Docker logs
+
+## Security Best Practices
+
+### Password Generation
+
+- Use cryptographically secure random generation
+- Implement proper character set validation
+- Ensure at least one character set is selected
+- Use Web Crypto API for secure random numbers
+
+### Authentication
+
+- Use NextAuth.js for secure authentication
+- Implement proper session management
+- Use environment variables for secrets
+- Follow OAuth 2.0 best practices
+
+Follow these standards consistently throughout the codebase to maintain code quality, security, and developer experience.
+description:
+globs:
+alwaysApply: true
+
+---
