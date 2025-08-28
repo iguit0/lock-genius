@@ -170,7 +170,7 @@ export default function PasswordsPage() {
       ) : (
         <div className="flex flex-col items-center gap-6 md:grid md:items-start">
           {passwords.map((password) => (
-            <Card key={password.id} className="w-full max-w-2xl">
+            <Card key={password.id} className="w-full md:w-auto">
               <CardHeader className="pb-4">
                 <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <div className="flex items-center space-x-3">

@@ -99,7 +99,7 @@ export const Navbar = () => {
             <Link
               href="/"
               className={`block text-sm font-medium transition-colors hover:text-primary py-2 relative ${
-                pathname === '/' ? 'text-primary' : ''
+                pathname === '/' ? 'text-primary pl-3' : ''
               }`}
               onClick={closeMobileMenu}
             >
@@ -111,7 +111,7 @@ export const Navbar = () => {
             <Link
               href="/generator"
               className={`block text-sm font-medium transition-colors hover:text-primary py-2 relative ${
-                pathname === '/generator' ? 'text-primary' : ''
+                pathname === '/generator' ? 'text-primary pl-3' : ''
               }`}
               onClick={closeMobileMenu}
             >
@@ -123,7 +123,7 @@ export const Navbar = () => {
             <Link
               href="/passwords"
               className={`block text-sm font-medium transition-colors hover:text-primary py-2 relative ${
-                pathname === '/passwords' ? 'text-primary' : ''
+                pathname === '/passwords' ? 'text-primary pl-3' : ''
               }`}
               onClick={closeMobileMenu}
             >
