@@ -12,9 +12,12 @@ Lock Genius is a secure password manager built with Next.js 14 App Router, TypeS
 ```bash
 pnpm dev          # Start dev server (runs prisma generate first)
 pnpm build        # Production build with Prisma generation and db push
-pnpm lint         # Run ESLint
-pnpm lint:fix     # Auto-fix ESLint issues
-pnpm format:write # Format code with Prettier
+pnpm lint         # Run Biome linter
+pnpm lint:fix     # Auto-fix Biome lint issues
+pnpm format:check # Check code formatting with Biome
+pnpm format:write # Format code with Biome
+pnpm check        # Run Biome linter and formatter together
+pnpm check:fix    # Auto-fix all Biome issues (lint + format)
 pnpm typecheck    # TypeScript type checking
 ```
 
@@ -82,6 +85,7 @@ Required in `.env`:
 - NextAuth.js for authentication
 - Tailwind CSS v4 + shadcn/ui + Radix UI
 - React Hook Form + Zod for forms
+- Biome for linting and formatting
 - Jest + React Testing Library for tests
 - pnpm as package manager
 
