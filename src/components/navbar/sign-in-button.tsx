@@ -1,22 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { signIn, useSession } from 'next-auth/react';
-
+import { useEffect, useState } from 'react';
+import { Button, type ButtonProps } from '@/components/ui/button';
 import { Icons } from '../icons';
 import { useToast } from '../ui/use-toast';
-
-import { Button, ButtonProps } from '@/components/ui/button';
 
 type SignInButtonProps = ButtonProps & {
   alternativeIcon?: boolean;
 };
 
-export const SignInButton = ({
-  fullWidth,
-  size,
-  alternativeIcon = false,
-}: SignInButtonProps) => {
+export const SignInButton = ({ fullWidth, size, alternativeIcon = false }: SignInButtonProps) => {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();

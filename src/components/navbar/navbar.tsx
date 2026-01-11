@@ -1,17 +1,15 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-
-import { Icons } from '../icons';
-
+import { useState } from 'react';
 import { SignInButton } from '@/components/navbar/sign-in-button';
 import { ThemeToggle } from '@/components/navbar/theme-toggle';
 import { UserDropdown } from '@/components/navbar/user-dropdown';
 import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/lib/constant';
+import { Icons } from '../icons';
 
 export const Navbar = () => {
   const { data: session } = useSession();
@@ -73,11 +71,7 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          {session ? (
-            <UserDropdown session={session} />
-          ) : (
-            <SignInButton size="sm" />
-          )}
+          {session ? <UserDropdown session={session} /> : <SignInButton size="sm" />}
 
           {/* Mobile Menu Button */}
           <Button

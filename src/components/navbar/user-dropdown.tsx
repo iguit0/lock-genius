@@ -1,11 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { Session } from 'next-auth';
+import type { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
-
-import { UserDropdownInfo } from './user-dropdown-info';
-
 import { Icons } from '@/components/icons';
 import {
   DropdownMenu,
@@ -14,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { UserDropdownInfo } from './user-dropdown-info';
 
 export interface UserInfo {
   name: string;

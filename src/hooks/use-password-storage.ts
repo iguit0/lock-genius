@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
 export interface StoredPassword {
   id: string;
@@ -66,9 +66,7 @@ export const usePasswordStorage = () => {
   }, [status]);
 
   // Save password
-  const savePassword = async (
-    passwordData: Omit<StoredPassword, 'id' | 'createdAt'>
-  ) => {
+  const savePassword = async (passwordData: Omit<StoredPassword, 'id' | 'createdAt'>) => {
     const newPassword: StoredPassword = {
       ...passwordData,
       id: crypto.randomUUID(),
@@ -93,10 +91,7 @@ export const usePasswordStorage = () => {
       }
     } else {
       // Save in local storage
-      const updatedPasswords = [newPassword, ...localPasswords].slice(
-        0,
-        MAX_LOCAL_PASSWORDS
-      );
+      const updatedPasswords = [newPassword, ...localPasswords].slice(0, MAX_LOCAL_PASSWORDS);
       setLocalPasswords(updatedPasswords);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPasswords));
       return newPassword;

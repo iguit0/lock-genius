@@ -5,7 +5,7 @@ import {
   Loader,
   Lock,
   LogOut,
-  LucideProps,
+  type LucideProps,
   Menu,
   Moon,
   RefreshCcw,

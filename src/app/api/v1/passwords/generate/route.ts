@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 interface GeneratePasswordOptions {
   length: number;
@@ -46,11 +46,8 @@ export async function POST(request: NextRequest) {
     }).join('');
 
     return NextResponse.json({ password }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+  } catch (_error) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 

@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 import packageJson from '../../../../../../package.json';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     return new NextResponse(packageJson.version, {
       status: 200,
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
         Expires: '0',
       },
     });
-  } catch (error) {
+  } catch (_error) {
     return new NextResponse('Internal server error', {
       status: 500,
       headers: {

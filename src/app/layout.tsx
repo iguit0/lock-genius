@@ -1,7 +1,7 @@
 import '@/styles/globals.css';
 
-import { PropsWithChildren } from 'react';
 import type { Metadata } from 'next';
+import type { PropsWithChildren } from 'react';
 
 import { Navbar } from '@/components/navbar/navbar';
 import { Provider } from '@/components/provider';

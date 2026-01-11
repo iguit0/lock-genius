@@ -1,26 +1,8 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AxiosError } from 'axios';
 import { z } from 'zod';
-
-import { Icons } from './icons';
-import { BorderBeam } from './magicui/border-beam';
-import { ShineBorder } from './magicui/shine-border';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from './ui/card';
-import { Input } from './ui/input';
-import { Separator } from './ui/separator';
-import { Slider } from './ui/slider';
-import { Switch } from './ui/switch';
-import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
-import { useToast } from './ui/use-toast';
-
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -33,6 +15,16 @@ import {
 import { useCopyToClipboard } from '@/hooks/use-copy-clipboard';
 import { usePasswordStorage } from '@/hooks/use-password-storage';
 import { generatePassword } from '@/services/password/password.service';
+import { Icons } from './icons';
+import { BorderBeam } from './magicui/border-beam';
+import { ShineBorder } from './magicui/shine-border';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Separator } from './ui/separator';
+import { Slider } from './ui/slider';
+import { Switch } from './ui/switch';
+import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+import { useToast } from './ui/use-toast';
 
 const formSchema = z.object({
   length: z.number().min(4).max(255),
@@ -120,18 +112,12 @@ export default function PasswordGenerator() {
   return (
     <div className="relative w-full max-w-2xl">
       <Card className="relative w-full max-w-2xl">
-        <ShineBorder
-          borderWidth={1}
-          duration={16}
-          shineColor={['#3b82f6', '#8b5cf6', '#06b6d4']}
-        />
+        <ShineBorder borderWidth={1} duration={16} shineColor={['#3b82f6', '#8b5cf6', '#06b6d4']} />
         <CardHeader className="mb-3 space-y-2">
           <CardTitle className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
             Password Generator
           </CardTitle>
-          <CardDescription>
-            Generate a secure password based on selected options.
-          </CardDescription>
+          <CardDescription>Generate a secure password based on selected options.</CardDescription>
         </CardHeader>
 
         <Separator className="my-1" />
@@ -184,12 +170,7 @@ export default function PasswordGenerator() {
                   <div className="flex w-full justify-center space-x-2 sm:w-auto">
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Button
-                          size="icon"
-                          id="generate"
-                          variant="ghost"
-                          type="submit"
-                        >
+                        <Button size="icon" id="generate" variant="ghost" type="submit">
                           <TooltipContent>Generate</TooltipContent>
                           <Icons.refresh className="size-5" />
                         </Button>
@@ -227,10 +208,7 @@ export default function PasswordGenerator() {
                         <TooltipContent>(A-Z)</TooltipContent>
                       </Tooltip>
                       <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -249,10 +227,7 @@ export default function PasswordGenerator() {
                         <TooltipContent>(0-9)</TooltipContent>
                       </Tooltip>
                       <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -271,10 +246,7 @@ export default function PasswordGenerator() {
                         <TooltipContent>(a-z)</TooltipContent>
                       </Tooltip>
                       <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -293,10 +265,7 @@ export default function PasswordGenerator() {
                         <TooltipContent>!@#$%^&*</TooltipContent>
                       </Tooltip>
                       <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                     </FormItem>
                   )}

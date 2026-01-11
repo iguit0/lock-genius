@@ -21,13 +21,9 @@ export default function Home() {
               'Generate and save your best choices'
             ) : (
               <span className="text-muted-foreground/90">
-                Generate{' '}
-                <strong className="text-foreground font-semibold">
-                  strong passwords
-                </strong>{' '}
-                and{' '}
-                <strong className="text-foreground font-semibold">store</strong>{' '}
-                them in your digital vault
+                Generate <strong className="text-foreground font-semibold">strong passwords</strong>{' '}
+                and <strong className="text-foreground font-semibold">store</strong> them in your
+                digital vault
               </span>
             )}
           </p>

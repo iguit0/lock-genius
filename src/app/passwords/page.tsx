@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { useSession } from 'next-auth/react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Icons } from '@/components/icons';
 import {
@@ -18,19 +18,10 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
-import {
-  StoredPassword,
-  usePasswordStorage,
-} from '@/hooks/use-password-storage';
+import { type StoredPassword, usePasswordStorage } from '@/hooks/use-password-storage';
 
 interface LocalStoredPassword {
   id: string;
@@ -72,7 +63,7 @@ export default function PasswordsPage() {
           setPasswords([]);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: 'Error loading passwords',
         description: 'Could not load your passwords.',
@@ -89,7 +80,7 @@ export default function PasswordsPage() {
       loadPasswords();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status]);
+  }, [status, loadPasswords]);
 
   const handleDeletePassword = async (id: string) => {
     try {
@@ -100,7 +91,7 @@ export default function PasswordsPage() {
         description: 'Password was successfully removed.',
         variant: 'success',
       });
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: 'Error deleting password',
         description: 'Could not delete the password.',
@@ -117,7 +108,7 @@ export default function PasswordsPage() {
         description: 'Password copied to clipboard.',
         variant: 'success',
       });
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: 'Error copying',
         description: 'Could not copy the password.',
@@ -133,9 +124,7 @@ export default function PasswordsPage() {
         <div className="flex items-center justify-center">
           <Icons.loader className="size-8 animate-spin" />
           <span className="ml-2">
-            {status === 'loading'
-              ? 'Checking authentication...'
-              : 'Loading passwords...'}
+            {status === 'loading' ? 'Checking authentication...' : 'Loading passwords...'}
           </span>
         </div>
       </div>
@@ -159,8 +148,8 @@ export default function PasswordsPage() {
             <Icons.lock className="size-16 text-muted-foreground mb-4" />
             <h3 className="text-xl font-semibold mb-2">No passwords found</h3>
             <p className="text-muted-foreground text-center mb-4">
-              You haven&apos;t generated any passwords yet. Go to the password
-              generator to get started!
+              You haven&apos;t generated any passwords yet. Go to the password generator to get
+              started!
             </p>
             <Button asChild>
               <a href="/generator">Generate Password</a>
@@ -174,12 +163,8 @@ export default function PasswordsPage() {
               <CardHeader className="pb-4">
                 <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <div className="flex items-center space-x-3">
-                    <CardTitle className="text-lg">
-                      Generated Password
-                    </CardTitle>
-                    <Badge variant="secondary">
-                      {password.length} characters
-                    </Badge>
+                    <CardTitle className="text-lg">Generated Password</CardTitle>
+                    <Badge variant="secondary">{password.length} characters</Badge>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Button
@@ -192,23 +177,17 @@ export default function PasswordsPage() {
                     </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          className="text-white"
-                        >
+                        <Button size="sm" variant="destructive" className="text-white">
                           <Icons.trash className="size-4 mr-2" />
                           Delete
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>
                         <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Are you absolutely sure?
-                          </AlertDialogTitle>
+                          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                           <AlertDialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete your password.
+                            This action cannot be undone. This will permanently delete your
+                            password.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
@@ -226,10 +205,7 @@ export default function PasswordsPage() {
                 </div>
                 <CardDescription className="mt-2">
                   Generated on{' '}
-                  {format(
-                    new Date(password.createdAt),
-                    "MMMM dd, yyyy 'at' HH:mm zzz"
-                  )}
+                  {format(new Date(password.createdAt), "MMMM dd, yyyy 'at' HH:mm zzz")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">

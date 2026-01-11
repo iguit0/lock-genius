@@ -14,10 +14,7 @@ const GridBeams = React.forwardRef<HTMLDivElement, GridBeamsProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          'relative h-full w-full overflow-hidden bg-background',
-          className
-        )}
+        className={cn('relative h-full w-full overflow-hidden bg-background', className)}
         {...props}
       >
         {/* Grid Pattern */}
