@@ -1,7 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/auth-client';
 import { useCallback, useEffect, useState } from 'react';
 
 import { Icons } from '@/components/icons';
@@ -31,26 +31,26 @@ interface LocalStoredPassword {
   lowercase: boolean;
   numbers: boolean;
   symbols: boolean;
-  createdAt: string; // ISO string from localStorage
+  createdAt: string;
 }
 
 export default function PasswordsPage() {
-  const { data: session, status } = useSession();
+  const { data, isPending } = useSession();
   const { getPasswords, deletePassword } = usePasswordStorage();
   const { toast } = useToast();
   const [passwords, setPasswords] = useState<StoredPassword[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const isAuthenticated = !!data?.session;
+
   const loadPasswords = useCallback(async () => {
     try {
       setLoading(true);
 
-      if (session) {
-        // For authenticated users, fetch from API
+      if (isAuthenticated) {
         const fetchedPasswords = await getPasswords();
         setPasswords(fetchedPasswords);
       } else {
-        // For unauthenticated users, read directly from localStorage
         const stored = localStorage.getItem('lock-genius-passwords');
         if (stored) {
           const passwords = JSON.parse(stored);
@@ -72,15 +72,13 @@ export default function PasswordsPage() {
     } finally {
       setLoading(false);
     }
-  }, [session, getPasswords, toast]);
+  }, [isAuthenticated, getPasswords, toast]);
 
   useEffect(() => {
-    // Only load passwords when session status is determined
-    if (status === 'authenticated' || status === 'unauthenticated') {
+    if (!isPending) {
       loadPasswords();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, loadPasswords]);
+  }, [isPending, loadPasswords]);
 
   const handleDeletePassword = async (id: string) => {
     try {
@@ -117,14 +115,13 @@ export default function PasswordsPage() {
     }
   };
 
-  // Show loading state while session is being determined
-  if (status === 'loading' || loading) {
+  if (isPending || loading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center">
           <Icons.loader className="size-8 animate-spin" />
           <span className="ml-2">
-            {status === 'loading' ? 'Checking authentication...' : 'Loading passwords...'}
+            {isPending ? 'Checking authentication...' : 'Loading passwords...'}
           </span>
         </div>
       </div>
@@ -136,7 +133,7 @@ export default function PasswordsPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Your Passwords</h1>
         <p className="text-muted-foreground">
-          {session
+          {isAuthenticated
             ? 'Your passwords are securely saved in the database.'
             : 'Your passwords are saved locally (maximum 50). Login to sync with the cloud.'}
         </p>
