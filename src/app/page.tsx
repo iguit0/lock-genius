@@ -1,13 +1,13 @@
 'use client';
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/auth-client';
 
 import { HomeActions } from '@/components/home/actions';
 import { GridBeams } from '@/components/ui/grid-beams';
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { data } = useSession();
 
-  const isAuthenticated = !!session;
+  const isAuthenticated = !!data?.session;
 
   return (
     <GridBeams className="min-h-screen">
