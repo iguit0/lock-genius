@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
 
 import { Navbar } from '@/components/navbar/navbar';
-import { Provider } from '@/components/provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -52,15 +51,13 @@ const RootLayout = ({ children }: PropsWithChildren) => {
       </head>
       <body className={cn('h-screen font-sans', fonts)}>
         <ThemeProvider attribute="class">
-          <Provider>
-            <TooltipProvider>
-              <div className="flex h-full flex-col">
-                <Navbar />
-                <main className="flex-1 overflow-x-hidden">{children}</main>
-              </div>
-              <Toaster />
-            </TooltipProvider>
-          </Provider>
+          <TooltipProvider>
+            <div className="flex h-full flex-col">
+              <Navbar />
+              <main className="flex-1 overflow-x-hidden">{children}</main>
+            </div>
+            <Toaster />
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
