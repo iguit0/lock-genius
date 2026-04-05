@@ -1,4 +1,4 @@
-import { useSession } from 'next-auth/react';
+import { useSession } from '@/lib/auth-client';
 import { useEffect, useState } from 'react';
 
 export interface StoredPassword {
@@ -20,7 +20,7 @@ interface LocalStoredPassword {
   lowercase: boolean;
   numbers: boolean;
   symbols: boolean;
-  createdAt: string; // ISO string from localStorage
+  createdAt: string;
 }
 
 interface ApiStoredPassword {
@@ -31,20 +31,22 @@ interface ApiStoredPassword {
   lowercase: boolean;
   numbers: boolean;
   symbols: boolean;
-  createdAt: string; // ISO string from API
+  createdAt: string;
 }
 
 const LOCAL_STORAGE_KEY = 'lock-genius-passwords';
 const MAX_LOCAL_PASSWORDS = 50;
 
 export const usePasswordStorage = () => {
-  const { data: session, status } = useSession();
+  const { data, isPending } = useSession();
   const [localPasswords, setLocalPasswords] = useState<StoredPassword[]>([]);
 
-  // Load passwords from local storage
+  const isAuthenticated = !!data?.session;
+
   useEffect(() => {
-    // Only load from localStorage if not authenticated
-    if (status === 'unauthenticated') {
+    if (isPending) return;
+
+    if (!isAuthenticated) {
       try {
         const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (stored) {
@@ -59,13 +61,11 @@ export const usePasswordStorage = () => {
       } catch (error) {
         console.error('Error loading passwords from local storage:', error);
       }
-    } else if (status === 'authenticated') {
-      // Clear local passwords when authenticated
+    } else {
       setLocalPasswords([]);
     }
-  }, [status]);
+  }, [isPending, isAuthenticated]);
 
-  // Save password
   const savePassword = async (passwordData: Omit<StoredPassword, 'id' | 'createdAt'>) => {
     const newPassword: StoredPassword = {
       ...passwordData,
@@ -73,8 +73,7 @@ export const usePasswordStorage = () => {
       createdAt: new Date(),
     };
 
-    if (session) {
-      // Save in database
+    if (isAuthenticated) {
       try {
         const response = await fetch('/api/v1/passwords', {
           method: 'POST',
@@ -90,7 +89,6 @@ export const usePasswordStorage = () => {
         throw error;
       }
     } else {
-      // Save in local storage
       const updatedPasswords = [newPassword, ...localPasswords].slice(0, MAX_LOCAL_PASSWORDS);
       setLocalPasswords(updatedPasswords);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPasswords));
@@ -98,9 +96,8 @@ export const usePasswordStorage = () => {
     }
   };
 
-  // Fetch passwords
   const getPasswords = async (): Promise<StoredPassword[]> => {
-    if (session) {
+    if (isAuthenticated) {
       try {
         const response = await fetch('/api/v1/passwords');
         if (!response.ok) throw new Error('Error fetching passwords');
@@ -118,9 +115,8 @@ export const usePasswordStorage = () => {
     }
   };
 
-  // Delete password
   const deletePassword = async (id: string) => {
-    if (session) {
+    if (isAuthenticated) {
       try {
         const response = await fetch(`/api/v1/passwords/${id}`, {
           method: 'DELETE',
@@ -141,8 +137,8 @@ export const usePasswordStorage = () => {
     savePassword,
     getPasswords,
     deletePassword,
-    passwords: session ? [] : localPasswords, // For authenticated users, load from API
-    isAuthenticated: !!session,
-    isLoading: status === 'loading',
+    passwords: isAuthenticated ? [] : localPasswords,
+    isAuthenticated,
+    isLoading: isPending,
   };
 };
