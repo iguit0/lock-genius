@@ -1,8 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import type { Session } from 'next-auth';
-import { signOut } from 'next-auth/react';
+import { signOut } from '@/lib/auth-client';
 import { Icons } from '@/components/icons';
 import {
   DropdownMenu,
@@ -22,11 +21,19 @@ export interface UserInfo {
   };
 }
 
-export const UserDropdown = ({ session }: { session: Session }) => {
-  const imgSrc = session.user?.image || '';
-  const userName = session.user?.name || '';
+interface UserDropdownProps {
+  user: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+  };
+}
+
+export const UserDropdown = ({ user }: UserDropdownProps) => {
+  const imgSrc = user.image || '';
+  const userName = user.name || '';
   const imgAlt = userName || 'User profile image';
-  const userEmail = session.user?.email || '';
+  const userEmail = user.email || '';
 
   const userInfo: UserInfo = {
     name: userName,

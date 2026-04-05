@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { useSession } from '@/lib/auth-client';
 import { SignInButton } from '@/components/navbar/sign-in-button';
 import { ThemeToggle } from '@/components/navbar/theme-toggle';
 import { UserDropdown } from '@/components/navbar/user-dropdown';
@@ -12,7 +12,7 @@ import { siteConfig } from '@/lib/constant';
 import { Icons } from '../icons';
 
 export const Navbar = () => {
-  const { data: session } = useSession();
+  const { data } = useSession();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -71,7 +71,7 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          {session ? <UserDropdown session={session} /> : <SignInButton size="sm" />}
+          {data?.user ? <UserDropdown user={data.user} /> : <SignInButton size="sm" />}
 
           {/* Mobile Menu Button */}
           <Button
