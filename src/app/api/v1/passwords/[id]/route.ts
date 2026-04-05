@@ -1,30 +1,24 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
+import { headers } from 'next/headers';
 
-import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
+import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authOptions);
+    const { id } = await params;
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
 
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-
-    // Check if the password belongs to the user
     const password = await prisma.password.findFirst({
       where: {
-        id: params.id,
-        userId: user.id,
+        id,
+        userId: session.user.id,
       },
     });
 
@@ -33,7 +27,7 @@ export async function DELETE(_request: NextRequest, { params }: { params: { id: 
     }
 
     await prisma.password.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Password deleted successfully' });
