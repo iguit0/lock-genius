@@ -1,13 +1,13 @@
 import { render } from '@testing-library/react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { useSession } from '@/lib/auth-client';
 
 import Home from '@/app/page';
 
 const mockUseSession = useSession as jest.Mock;
-(signIn as jest.Mock).mockImplementation(() => jest.fn());
-(signOut as jest.Mock).mockImplementation(() => jest.fn());
 
-jest.mock('next-auth/react');
+jest.mock('@/lib/auth-client', () => ({
+  useSession: jest.fn(),
+}));
 
 describe('Homepage', () => {
   beforeEach(() => {
@@ -16,8 +16,8 @@ describe('Homepage', () => {
 
   it('should render unauthenticated', () => {
     mockUseSession.mockReturnValue({
-      status: 'unauthenticated',
       data: null,
+      isPending: false,
     });
 
     const { getByText, getByRole } = render(<Home />);
@@ -33,15 +33,21 @@ describe('Homepage', () => {
 
   it('should render authenticated', () => {
     mockUseSession.mockReturnValue({
-      status: 'authenticated',
       data: {
+        session: {
+          id: 'sess_123',
+          userId: '123',
+          expiresAt: new Date(),
+          token: 'test-token',
+        },
         user: {
+          id: '123',
           name: 'John Doe',
           email: 'john-doe@test.com',
           image: null,
         },
-        expires: '1',
       },
+      isPending: false,
     });
 
     const { getByText, queryByText } = render(<Home />);

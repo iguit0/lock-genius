@@ -11,6 +11,9 @@ const config = {
   coverageReporters: ['html'],
   coverageDirectory: './coverage',
   testEnvironment: 'jest-environment-jsdom',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
 };
 
 module.exports = createJestConfig(config);
