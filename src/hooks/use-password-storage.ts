@@ -1,5 +1,5 @@
 import { useSession } from '@/lib/auth-client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface StoredPassword {
   id: string;
@@ -66,7 +66,7 @@ export const usePasswordStorage = () => {
     }
   }, [isPending, isAuthenticated]);
 
-  const savePassword = async (passwordData: Omit<StoredPassword, 'id' | 'createdAt'>) => {
+  const savePassword = useCallback(async (passwordData: Omit<StoredPassword, 'id' | 'createdAt'>) => {
     const newPassword: StoredPassword = {
       ...passwordData,
       id: crypto.randomUUID(),
@@ -94,9 +94,9 @@ export const usePasswordStorage = () => {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPasswords));
       return newPassword;
     }
-  };
+  }, [isAuthenticated, localPasswords]);
 
-  const getPasswords = async (): Promise<StoredPassword[]> => {
+  const getPasswords = useCallback(async (): Promise<StoredPassword[]> => {
     if (isAuthenticated) {
       try {
         const response = await fetch('/api/v1/passwords');
@@ -113,9 +113,9 @@ export const usePasswordStorage = () => {
     } else {
       return localPasswords;
     }
-  };
+  }, [isAuthenticated, localPasswords]);
 
-  const deletePassword = async (id: string) => {
+  const deletePassword = useCallback(async (id: string) => {
     if (isAuthenticated) {
       try {
         const response = await fetch(`/api/v1/passwords/${id}`, {
@@ -131,7 +131,7 @@ export const usePasswordStorage = () => {
       setLocalPasswords(updatedPasswords);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPasswords));
     }
-  };
+  }, [isAuthenticated, localPasswords]);
 
   return {
     savePassword,
