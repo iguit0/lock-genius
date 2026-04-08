@@ -89,6 +89,19 @@ Required in `.env`:
 - Jest + React Testing Library for tests
 - pnpm as package manager
 
+## Security Policy
+
+### Dependency Auditing
+- `pnpm audit` runs automatically in CI on every push and PR to `main`
+- Use `pnpm audit` locally before adding new dependencies
+- Use `pnpm.overrides` in `package.json` to patch transitive dependency vulnerabilities when direct upgrades aren't available
+
+### Glob / Pattern Matching
+- **Never pass user-controlled input** to `minimatch`, `glob`, `micromatch`, `picomatch`, or any glob/pattern-matching library as the **pattern** argument
+- Glob patterns must always be hardcoded or developer-controlled (config files, build scripts)
+- User input may only be matched **against** a pattern (as the test string), never **as** the pattern itself
+- This prevents ReDoS (Regular Expression Denial of Service) attacks via crafted glob patterns
+
 ## Import Conventions
 Use `@/` path alias for imports from `src/`:
 ```typescript
