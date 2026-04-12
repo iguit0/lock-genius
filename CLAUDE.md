@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Lock Genius is a secure password manager built with Next.js 14 App Router, TypeScript, PostgreSQL/Prisma, and NextAuth.js for GitHub OAuth authentication.
+Lock Genius is a secure password manager built with Next.js 14 App Router, TypeScript, PostgreSQL/Prisma, and Better Auth for GitHub OAuth authentication.
 
 ## Commands
 
@@ -42,13 +42,15 @@ pnpm docker:down # Stop Docker services
 ### Directory Structure
 - `src/app/` - Next.js App Router pages and API routes
 - `src/app/api/v1/` - Versioned API endpoints (health, passwords)
-- `src/app/api/auth/` - NextAuth.js authentication routes
+- `src/app/api/auth/` - Better Auth authentication routes (`[...all]/route.ts`)
 - `src/components/ui/` - shadcn/ui base components with Radix UI primitives
 - `src/components/magicui/` - Magic UI animated components
 - `src/services/` - API service layer with typed request/response interfaces
 - `src/common/api.ts` - Axios instance configured with base URL `/api/v1`
 - `src/hooks/` - Custom React hooks (clipboard, mounted, password storage)
-- `src/lib/` - Utilities including Prisma client, `cn()` helper, fonts
+- `src/lib/` - Utilities including Prisma client, `cn()` helper, fonts, auth config
+- `src/lib/auth.ts` - Better Auth server config (betterAuth + prismaAdapter)
+- `src/lib/auth-client.ts` - Better Auth React client (exports `useSession`, `signIn`, `signOut`)
 - `src/env.mjs` - T3 Env for type-safe environment variables with Zod validation
 
 ### Key Patterns
@@ -64,16 +66,18 @@ pnpm docker:down # Stop Docker services
 
 **Forms**: Use React Hook Form with Zod resolver for validation. Mark form components with `'use client'`.
 
-**Authentication**: NextAuth.js with GitHub OAuth provider and Prisma adapter. Session data accessed via `useSession()` hook.
+**Authentication**: Better Auth with GitHub OAuth provider and Prisma adapter. `useSession()` from `@/lib/auth-client` returns `{ data: { session, user }, isPending }`.
 
 ### Database Schema (Prisma)
-- `User` - Core user model linked to NextAuth
-- `Account`, `Session`, `VerificationToken` - NextAuth required models
+- `User` - Core user model linked to Better Auth
+- `Account`, `Session`, `Verification` - Better Auth required models
 - `Password` - Stored passwords with generation metadata (length, character set flags)
 
 ### Environment Variables
 Required in `.env`:
 - `DATABASE_URL` - PostgreSQL connection string
+- `BETTER_AUTH_URL` - App URL for auth callbacks
+- `BETTER_AUTH_SECRET` - Auth secret (min 32 chars)
 - `AUTH_GITHUB_ID` - GitHub OAuth client ID
 - `AUTH_GITHUB_SECRET` - GitHub OAuth client secret
 - `NEXT_PUBLIC_API_URL` (optional) - API base URL override
@@ -82,7 +86,7 @@ Required in `.env`:
 - Next.js 14 with App Router and Turbopack
 - TypeScript with strict mode
 - PostgreSQL + Prisma ORM
-- NextAuth.js for authentication
+- Better Auth for authentication
 - Tailwind CSS v4 + shadcn/ui + Radix UI
 - React Hook Form + Zod for forms
 - Biome for linting and formatting
