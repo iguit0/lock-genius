@@ -1,9 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-import { useSession } from '@/lib/auth-client';
 import { useCallback, useEffect, useState } from 'react';
-
 import { Icons } from '@/components/icons';
 import {
   AlertDialog,
@@ -22,6 +20,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
 import { type StoredPassword, usePasswordStorage } from '@/hooks/use-password-storage';
+import { useSession } from '@/lib/auth-client';
 
 interface LocalStoredPassword {
   id: string;

@@ -3,11 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { useSession } from '@/lib/auth-client';
 import { SignInButton } from '@/components/navbar/sign-in-button';
 import { ThemeToggle } from '@/components/navbar/theme-toggle';
 import { UserDropdown } from '@/components/navbar/user-dropdown';
 import { Button } from '@/components/ui/button';
+import { useSession } from '@/lib/auth-client';
 import { siteConfig } from '@/lib/constant';
 import { Icons } from '../icons';
 

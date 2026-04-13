@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
-import { useSession } from '@/lib/auth-client';
-
 import Home from '@/app/page';
+import { useSession } from '@/lib/auth-client';
 
 const mockUseSession = useSession as jest.Mock;
 

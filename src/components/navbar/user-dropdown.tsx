@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { signOut } from '@/lib/auth-client';
 import { Icons } from '@/components/icons';
 import {
   DropdownMenu,
@@ -10,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { signOut } from '@/lib/auth-client';
 import { UserDropdownInfo } from './user-dropdown-info';
 
 export interface UserInfo {

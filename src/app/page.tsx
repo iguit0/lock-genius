@@ -1,8 +1,8 @@
 'use client';
-import { useSession } from '@/lib/auth-client';
 
 import { HomeActions } from '@/components/home/actions';
 import { GridBeams } from '@/components/ui/grid-beams';
+import { useSession } from '@/lib/auth-client';
 
 export default function Home() {
   const { data } = useSession();

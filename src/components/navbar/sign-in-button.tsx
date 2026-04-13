@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { signIn } from '@/lib/auth-client';
 import { Button, type ButtonProps } from '@/components/ui/button';
+import { signIn } from '@/lib/auth-client';
 import { Icons } from '../icons';
 import { useToast } from '../ui/use-toast';
 

@@ -1,5 +1,5 @@
-import { useSession } from '@/lib/auth-client';
 import { useCallback, useEffect, useState } from 'react';
+import { useSession } from '@/lib/auth-client';
 
 export interface StoredPassword {
   id: string;
@@ -66,35 +66,38 @@ export const usePasswordStorage = () => {
     }
   }, [isPending, isAuthenticated]);
 
-  const savePassword = useCallback(async (passwordData: Omit<StoredPassword, 'id' | 'createdAt'>) => {
-    const newPassword: StoredPassword = {
-      ...passwordData,
-      id: crypto.randomUUID(),
-      createdAt: new Date(),
-    };
+  const savePassword = useCallback(
+    async (passwordData: Omit<StoredPassword, 'id' | 'createdAt'>) => {
+      const newPassword: StoredPassword = {
+        ...passwordData,
+        id: crypto.randomUUID(),
+        createdAt: new Date(),
+      };
 
-    if (isAuthenticated) {
-      try {
-        const response = await fetch('/api/v1/passwords', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newPassword),
-        });
+      if (isAuthenticated) {
+        try {
+          const response = await fetch('/api/v1/passwords', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newPassword),
+          });
 
-        if (!response.ok) throw new Error('Error saving password');
+          if (!response.ok) throw new Error('Error saving password');
 
-        return await response.json();
-      } catch (error) {
-        console.error('Error saving password to database:', error);
-        throw error;
+          return await response.json();
+        } catch (error) {
+          console.error('Error saving password to database:', error);
+          throw error;
+        }
+      } else {
+        const updatedPasswords = [newPassword, ...localPasswords].slice(0, MAX_LOCAL_PASSWORDS);
+        setLocalPasswords(updatedPasswords);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPasswords));
+        return newPassword;
       }
-    } else {
-      const updatedPasswords = [newPassword, ...localPasswords].slice(0, MAX_LOCAL_PASSWORDS);
-      setLocalPasswords(updatedPasswords);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPasswords));
-      return newPassword;
-    }
-  }, [isAuthenticated, localPasswords]);
+    },
+    [isAuthenticated, localPasswords]
+  );
 
   const getPasswords = useCallback(async (): Promise<StoredPassword[]> => {
     if (isAuthenticated) {
@@ -115,23 +118,26 @@ export const usePasswordStorage = () => {
     }
   }, [isAuthenticated, localPasswords]);
 
-  const deletePassword = useCallback(async (id: string) => {
-    if (isAuthenticated) {
-      try {
-        const response = await fetch(`/api/v1/passwords/${id}`, {
-          method: 'DELETE',
-        });
-        if (!response.ok) throw new Error('Error deleting password');
-      } catch (error) {
-        console.error('Error deleting password from database:', error);
-        throw error;
+  const deletePassword = useCallback(
+    async (id: string) => {
+      if (isAuthenticated) {
+        try {
+          const response = await fetch(`/api/v1/passwords/${id}`, {
+            method: 'DELETE',
+          });
+          if (!response.ok) throw new Error('Error deleting password');
+        } catch (error) {
+          console.error('Error deleting password from database:', error);
+          throw error;
+        }
+      } else {
+        const updatedPasswords = localPasswords.filter((p) => p.id !== id);
+        setLocalPasswords(updatedPasswords);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPasswords));
       }
-    } else {
-      const updatedPasswords = localPasswords.filter((p) => p.id !== id);
-      setLocalPasswords(updatedPasswords);
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedPasswords));
-    }
-  }, [isAuthenticated, localPasswords]);
+    },
+    [isAuthenticated, localPasswords]
+  );
 
   return {
     savePassword,
