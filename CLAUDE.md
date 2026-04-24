@@ -4,14 +4,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Lock Genius is a secure password manager built with Next.js 14 App Router, TypeScript, PostgreSQL/Prisma, and Better Auth for GitHub OAuth authentication.
+Lock Genius is a secure password manager built with Next.js 15 App Router, TypeScript, PostgreSQL/Prisma, and Better Auth for GitHub OAuth authentication.
 
 ## Commands
 
 ### Development
 ```bash
 pnpm dev          # Start dev server (runs prisma generate first)
-pnpm build        # Production build with Prisma generation and db push
+pnpm build        # Production build with Prisma generation, db push, and sitemap generation
 pnpm lint         # Run Biome linter
 pnpm lint:fix     # Auto-fix Biome lint issues
 pnpm format:check # Check code formatting with Biome
@@ -35,9 +35,15 @@ pnpm db:reset    # Force reset database (deletes all data)
 pnpm db:studio   # Open Prisma Studio
 pnpm docker:up   # Start PostgreSQL via Docker
 pnpm docker:down # Stop Docker services
+pnpm docker:logs # Tail Docker service logs
 ```
 
 ## Architecture
+
+### Pages
+- `/` - Landing page with sign-in prompt
+- `/generator` - Password generator UI (works for guests and authenticated users)
+- `/passwords` - Saved passwords list (localStorage for guests, DB for authenticated)
 
 ### Directory Structure
 - `src/app/` - Next.js App Router pages and API routes
@@ -68,6 +74,8 @@ pnpm docker:down # Stop Docker services
 
 **Authentication**: Better Auth with GitHub OAuth provider and Prisma adapter. `useSession()` from `@/lib/auth-client` returns `{ data: { session, user }, isPending }`.
 
+**Dual Password Storage**: Guest users store passwords in `localStorage` (capped at 50). Authenticated users store in PostgreSQL via the API. `usePasswordStorage` hook (`src/hooks/use-password-storage.ts`) abstracts this — it checks `useSession` and routes to the correct backend transparently.
+
 ### Database Schema (Prisma)
 - `User` - Core user model linked to Better Auth
 - `Account`, `Session`, `Verification` - Better Auth required models
@@ -83,7 +91,7 @@ Required in `.env`:
 - `NEXT_PUBLIC_API_URL` (optional) - API base URL override
 
 ## Tech Stack
-- Next.js 14 with App Router and Turbopack
+- Next.js 15 with App Router and Turbopack
 - TypeScript with strict mode
 - PostgreSQL + Prisma ORM
 - Better Auth for authentication

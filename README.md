@@ -25,21 +25,23 @@ A secure and modern password manager built with Next.js.
   - Cryptographically secure random generation
   - Customizable password options (length, character sets)
   - Copy to clipboard functionality
+- [x] Guest mode — generate and store up to 50 passwords locally without signing in
+- [x] Cloud sync — passwords sync to the database when you log in
+- [x] Password Vault Management (view, copy, and delete saved passwords)
+- [x] Dark / Light theme toggle
 - [x] Health Check API
-- [x] Database Integration
-- [ ] Password Vault Management
 - [x] Unit Testing
 
 ## 🛠 Tech Stack
 
-- **Framework**: Next.js 14 with App Router
+- **Framework**: Next.js 15 with App Router
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js
-- **UI**: Tailwind CSS, Radix UI
+- **Authentication**: Better Auth (GitHub OAuth)
+- **UI**: Tailwind CSS v4, shadcn/ui, Radix UI
 - **Testing**: Jest, React Testing Library
-- **Type Safety**: TypeScript
-- **Code Quality**: ESLint, Prettier
-- **API**: Built-in Next.js API Routes
+- **Type Safety**: TypeScript (strict mode)
+- **Code Quality**: Biome (lint + format)
+- **Forms**: React Hook Form + Zod
 
 ## 🖥 Installation
 
@@ -59,8 +61,15 @@ A secure and modern password manager built with Next.js.
    ```
 
 3. Install pnpm:
+
    ```bash
    npm install -g pnpm
+   ```
+
+4. Start the PostgreSQL database via Docker:
+
+   ```bash
+   pnpm docker:up
    ```
 
 ### Project Setup
@@ -81,8 +90,20 @@ A secure and modern password manager built with Next.js.
 3. Set up environment variables:
 
    ```bash
-   cp .env.example .env.local
+   cp .env.example .env
    ```
+
+   Fill in the values in `.env`:
+
+   | Variable | Description |
+   |----------|-------------|
+   | `DATABASE_URL` | PostgreSQL connection string |
+   | `BETTER_AUTH_URL` | App URL (e.g. `http://localhost:3000`) |
+   | `BETTER_AUTH_SECRET` | Random secret, min 32 characters |
+   | `AUTH_GITHUB_ID` | GitHub OAuth App client ID |
+   | `AUTH_GITHUB_SECRET` | GitHub OAuth App client secret |
+
+   > **GitHub OAuth**: Create an OAuth App at [github.com/settings/developers](https://github.com/settings/developers). Set the callback URL to `http://localhost:3000/api/auth/callback/github`.
 
 4. Set up the database:
 
@@ -91,6 +112,7 @@ A secure and modern password manager built with Next.js.
    ```
 
 5. Start the development server:
+
    ```bash
    pnpm dev
    ```
@@ -112,13 +134,11 @@ Visit `http://localhost:3000` to see the application running.
 
 - **Code Quality**:
 
-  - `pnpm lint` - Run ESLint
-  - `pnpm lint:fix` - Fix ESLint issues automatically
-  - `pnpm format:check` - Check code formatting
-  - `pnpm format:write` - Format code automatically
+  - `pnpm check` - Run Biome (lint + format check)
+  - `pnpm check:fix` - Auto-fix all Biome issues
   - `pnpm typecheck` - Run TypeScript type checking
 
-- **Docker** (if using Docker):
+- **Docker**:
   - `pnpm docker:up` - Start Docker services
   - `pnpm docker:down` - Stop Docker services
   - `pnpm docker:logs` - View Docker logs
