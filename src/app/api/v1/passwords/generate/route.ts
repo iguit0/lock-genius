@@ -1,18 +1,26 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
-interface GeneratePasswordOptions {
-  length: number;
-  uppercase: boolean;
-  lowercase: boolean;
-  numbers: boolean;
-  symbols: boolean;
-}
+import { passwordOptionsSchema } from '@/lib/password-schemas';
 
 export async function POST(request: NextRequest) {
   try {
-    const body: GeneratePasswordOptions = await request.json();
+    let rawBody: unknown;
+    try {
+      rawBody = await request.json();
+    } catch {
+      return NextResponse.json({ detail: 'Invalid JSON request body' }, { status: 400 });
+    }
 
-    // Character sets matching Python backend
+    const parsed = passwordOptionsSchema.safeParse(rawBody);
+
+    if (!parsed.success) {
+      return NextResponse.json(
+        { detail: parsed.error.issues[0]?.message || 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
+    const { length, uppercase, lowercase, numbers, symbols } = parsed.data;
     const charSets = {
       uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       lowercase: 'abcdefghijklmnopqrstuvwxyz',
@@ -23,24 +31,16 @@ export async function POST(request: NextRequest) {
     // Build selected character sets
     const selectedSets: string[] = [];
 
-    if (body.uppercase) selectedSets.push(charSets.uppercase);
-    if (body.lowercase) selectedSets.push(charSets.lowercase);
-    if (body.numbers) selectedSets.push(charSets.numbers);
-    if (body.symbols) selectedSets.push(charSets.symbols);
-
-    // Validate at least one option is selected
-    if (selectedSets.length === 0) {
-      return NextResponse.json(
-        { detail: 'At least one option should be selected' },
-        { status: 400 }
-      );
-    }
+    if (uppercase) selectedSets.push(charSets.uppercase);
+    if (lowercase) selectedSets.push(charSets.lowercase);
+    if (numbers) selectedSets.push(charSets.numbers);
+    if (symbols) selectedSets.push(charSets.symbols);
 
     // Combine all selected character sets
     const chars = selectedSets.join('');
 
     // Generate cryptographically secure random password
-    const password = Array.from({ length: body.length }, () => {
+    const password = Array.from({ length: length }, () => {
       const randomIndex = getSecureRandomInt(chars.length);
       return chars[randomIndex];
     }).join('');
