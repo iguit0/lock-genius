@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { auth } from '@/lib/auth';
+import { savePasswordSchema } from '@/lib/password-schemas';
 import prisma from '@/lib/prisma';
 
 export async function GET(_request: NextRequest) {
@@ -36,8 +37,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const { password, length, uppercase, lowercase, numbers, symbols } = body;
+    let rawBody: unknown;
+    try {
+      rawBody = await request.json();
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON request body' }, { status: 400 });
+    }
+
+    const parsed = savePasswordSchema.safeParse(rawBody);
+    if (!parsed.success) {
+      return NextResponse.json(
+        { error: parsed.error.issues[0]?.message || 'Invalid request body' },
+        { status: 400 }
+      );
+    }
+
+    const { password, length, uppercase, lowercase, numbers, symbols } = parsed.data;
 
     const newPassword = await prisma.password.create({
       data: {
