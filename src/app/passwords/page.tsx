@@ -22,20 +22,10 @@ import { useToast } from '@/components/ui/use-toast';
 import { type StoredPassword, usePasswordStorage } from '@/hooks/use-password-storage';
 import { useSession } from '@/lib/auth-client';
 
-interface LocalStoredPassword {
-  id: string;
-  password: string;
-  length: number;
-  uppercase: boolean;
-  lowercase: boolean;
-  numbers: boolean;
-  symbols: boolean;
-  createdAt: string;
-}
-
 export default function PasswordsPage() {
   const { data, isPending } = useSession();
-  const { getPasswords, deletePassword } = usePasswordStorage();
+  const { getPasswords, deletePassword, isSyncingLocalPasswords, lastLocalSyncResult } =
+    usePasswordStorage();
   const { toast } = useToast();
   const [passwords, setPasswords] = useState<StoredPassword[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,23 +35,8 @@ export default function PasswordsPage() {
   const loadPasswords = useCallback(async () => {
     try {
       setLoading(true);
-
-      if (isAuthenticated) {
-        const fetchedPasswords = await getPasswords();
-        setPasswords(fetchedPasswords);
-      } else {
-        const stored = localStorage.getItem('lock-genius-passwords');
-        if (stored) {
-          const passwords = JSON.parse(stored);
-          const parsedPasswords = passwords.map((p: LocalStoredPassword) => ({
-            ...p,
-            createdAt: new Date(p.createdAt),
-          }));
-          setPasswords(parsedPasswords);
-        } else {
-          setPasswords([]);
-        }
-      }
+      const fetchedPasswords = await getPasswords();
+      setPasswords(fetchedPasswords);
     } catch (_error) {
       toast({
         title: 'Error loading passwords',
@@ -71,13 +46,14 @@ export default function PasswordsPage() {
     } finally {
       setLoading(false);
     }
-  }, [isAuthenticated, getPasswords, toast]);
+  }, [getPasswords, toast]);
 
   useEffect(() => {
-    if (!isPending) {
+    if (!isPending && !isSyncingLocalPasswords) {
+      void lastLocalSyncResult;
       loadPasswords();
     }
-  }, [isPending, loadPasswords]);
+  }, [isPending, isSyncingLocalPasswords, lastLocalSyncResult, loadPasswords]);
 
   const handleDeletePassword = async (id: string) => {
     try {
@@ -114,7 +90,7 @@ export default function PasswordsPage() {
     }
   };
 
-  if (isPending || loading) {
+  if (isPending || isSyncingLocalPasswords || loading) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center">
